@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/spenceralger/log-generator.git"
+    "url": "git://github.com/spenceralger/makelogs.git"
   },
   "keywords": [
     "elasticsearch",
@@ -24,9 +24,9 @@
   "author": "Spencer Alger",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/spenceralger/log-generator/issues"
+    "url": "https://github.com/spenceralger/makelogs/issues"
   },
-  "homepage": "https://github.com/spenceralger/log-generator",
+  "homepage": "https://github.com/spenceralger/makelogs",
   "dependencies": {
     "async": "~0.9.0",
     "bluebird": "~2.1.2",
