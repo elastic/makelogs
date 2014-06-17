@@ -1,0 +1,38 @@
+{
+  "name": "makelogs",
+  "version": "0.0.0",
+  "description": "Simple log generator for testing kibana",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "makelogs": "./bin/makelogs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/spenceralger/log-generator.git"
+  },
+  "keywords": [
+    "elasticsearch",
+    "kibana",
+    "logstash",
+    "test-data",
+    "http",
+    "traffic"
+  ],
+  "author": "Spencer Alger",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/spenceralger/log-generator/issues"
+  },
+  "homepage": "https://github.com/spenceralger/log-generator",
+  "dependencies": {
+    "async": "~0.9.0",
+    "bluebird": "~2.1.2",
+    "elasticsearch": "~2.2.0",
+    "lodash": "~2.4.1",
+    "moment": "~2.7.0",
+    "optimist": "~0.6.1"
+  }
+}
