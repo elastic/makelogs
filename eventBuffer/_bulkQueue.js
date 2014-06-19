@@ -60,7 +60,7 @@ module.exports = function (eventBuffer) {
         }, 10 * esBulkQueueOverflow);
 
       } else {
-        process.stdout.write('.');
+        argv.progress();
       }
     })
     .nodeify(done);

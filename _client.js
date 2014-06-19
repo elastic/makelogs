@@ -2,6 +2,11 @@ var argv = require('./argv');
 var es = require('elasticsearch');
 
 var clientConfig = {};
+
+if (argv.trace) {
+  clientConfig.log = 'trace';
+}
+
 if (argv.host) {
   clientConfig.hosts = argv.host;
 } else if (argv.hosts) {

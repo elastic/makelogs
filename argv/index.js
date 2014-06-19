@@ -42,6 +42,14 @@ var optimist = require('optimist')
     reset: {
       describe: 'Clear all logstash-* indices before genrating logs',
       type: 'boolean'
+    },
+    verbose: {
+      describe: 'Log more info to the console',
+      type: 'boolean'
+    },
+    trace: {
+      describe: 'Log every request to elastisearch, including request bodies. BE CAREFULL',
+      type: 'boolean'
     }
   });
 
@@ -64,4 +72,8 @@ argv.total = require('./_parseCount')(argv);
 
 // since logging is based on the verbose command line flag??
 argv.log = argv.verbose ? _.bind(console.log, console) : _.noop;
+argv.progress = argv.verbose
+  ? _.bind(console.log, console, 'bulk request complete\n')
+  : _.bind(process.stdout.write, process.stdout, '.');
+
 module.exports = argv;

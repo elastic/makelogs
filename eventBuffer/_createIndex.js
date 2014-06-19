@@ -56,44 +56,44 @@ module.exports = function createIndex(indexName) {
           referer: {
             type: 'string',
             index: 'not_analyzed'
-          }
-        },
-        geo: {
-          properties: {
-            srcdst: {
-              type: 'string',
-              index: 'not_analyzed'
-            },
-            dst: {
-              type: 'string',
-              index: 'not_analyzed'
-            },
-            src: {
-              type: 'string',
-              index: 'not_analyzed'
-            },
-            coordinates: {
-              type: 'geo_point'
+          },
+          geo: {
+            properties: {
+              srcdst: {
+                type: 'string',
+                index: 'not_analyzed'
+              },
+              dst: {
+                type: 'string',
+                index: 'not_analyzed'
+              },
+              src: {
+                type: 'string',
+                index: 'not_analyzed'
+              },
+              coordinates: {
+                type: 'geo_point'
+              }
             }
-          }
-        },
-        meta: {
-          properties: {
-            related: {
-              type: 'string',
-            },
-            char: {
-              type: 'string',
-              index: 'not_analyzed'
-            },
-            user: {
-              properties: {
-                firstname: {
-                  type: 'string',
-                },
-                lastname: {
-                  type: 'integer',
-                  index: 'not_analyzed'
+          },
+          meta: {
+            properties: {
+              related: {
+                type: 'string',
+              },
+              char: {
+                type: 'string',
+                index: 'not_analyzed'
+              },
+              user: {
+                properties: {
+                  firstname: {
+                    type: 'string',
+                  },
+                  lastname: {
+                    type: 'integer',
+                    index: 'not_analyzed'
+                  }
                 }
               }
             }

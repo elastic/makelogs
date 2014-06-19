@@ -1,5 +1,6 @@
 var eventBuffer = [];
 var argv = require('../argv');
+var Promise = require('bluebird');
 var bulkQueue = require('./_bulkQueue')(eventBuffer);
 
 eventBuffer.push = function (event) {
@@ -11,7 +12,7 @@ eventBuffer.push = function (event) {
   }
 
   if (eventBuffer.length === 3000 || eventBuffer.final) {
-    eventBuffer.flush();
+    return eventBuffer.flush();
   }
 };
 
@@ -19,19 +20,27 @@ eventBuffer.push = function (event) {
 // bulk response will be retried together
 var pending;
 eventBuffer.flush = function () {
-  if (pending) return;
-  pending = setTimeout(function () {
-    pending = clearTimeout(pending);
+  if (pending) return pending;
 
-    argv.log('pushing', eventBuffer.length, 'events into the bulkQueue');
-    bulkQueue.push([eventBuffer.splice(0)], function (err) {
-      if (err) {
-        console.error(err.resp);
-        console.error(err.stack);
-        process.exit();
-      }
+  pending = Promise.delay(1)
+  .then(function () {
+    pending = null;
+
+    return new Promise(function (resolve) {
+      argv.log('pushing', eventBuffer.length, 'events into the bulkQueue');
+      bulkQueue.push([eventBuffer.splice(0)], function (err) {
+        if (err) {
+          console.error(err.resp);
+          console.error(err.stack);
+          process.exit();
+        } else {
+          resolve();
+        }
+      });
     });
-  }, 15);
+  });
+
+  return pending;
 };
 
 module.exports = eventBuffer;

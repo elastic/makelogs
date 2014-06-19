@@ -36,17 +36,27 @@ Promise.resolve()
   });
 })
 .then(function () {
+  argv.log('creating', total, 'events');
   var i = total;
-  return (function crunch(event) {
-    if (--i <= -1) return;
-    eventBuffer.push({
-      header: { _index: event.index, _type: samples.types(), _id: i, },
-      body: event
-    });
+  return (function crunch() {
+    argv.log('creating no more than', i, 'events');
 
-    // async so that there is time to process the queue
-    return Promise.resolve(randomEvent()).then(crunch);
-  }(randomEvent()));
+    for (; i >= 0; i--) {
+      var event = randomEvent();
+
+      // eventBuffer.push might return a promise,
+      var delay = eventBuffer.push({
+        header: { _index: event.index, _type: samples.types() },
+        body: event
+      });
+
+      if (delay) {
+        argv.log('waiting for bulk to complete');
+        // stop the loop and restart once complete
+        return Promise.resolve(delay).then(crunch);
+      }
+    }
+  }());
 })
 .then(function () {
   eventBuffer.push(false);

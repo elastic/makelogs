@@ -2,7 +2,7 @@ var _ = require('lodash');
 var moment = require('moment');
 
 module.exports = function parseDays(argv) {
-  var complexDateRE = /(\-|\+)\d+,?/g;
+  var complexDateRE = /(\-|\+|)\d+,?/g;
   var moments = [];
 
   if (_.isNumber(argv.days)) {
