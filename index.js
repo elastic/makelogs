@@ -16,10 +16,10 @@ var startingMoment = argv.start;
 var endingMoment = argv.end;
 
 console.log('Generating', total, 'events from', startingMoment.format(), 'to', endingMoment.format());
-if (argv.dry) process.exit();
 
 Promise.resolve()
 .then(function () {
+  if (argv.dry) return;
   if (argv.reset) {
     argv.log('clearing existing logstash-* indices');
     return client.indices.delete({
@@ -28,6 +28,7 @@ Promise.resolve()
   }
 })
 .then(function () {
+  if (argv.dry) return;
   argv.log('setting the bulk threadpool size to unlimited');
   return client.cluster.putSettings({
     body: {
@@ -50,6 +51,11 @@ Promise.resolve()
     for (; i >= 0; i--) {
       var event = randomEvent();
 
+      if (argv.dry) {
+        console.log('\n\n', event);
+        continue;
+      }
+
       // eventBuffer.push might return a promise,
       var delay = eventBuffer.push({
         header: { _index: event.index, _type: samples.types() },
@@ -65,6 +71,7 @@ Promise.resolve()
   }());
 })
 .then(function () {
+  if (argv.dry) return;
   eventBuffer.push(false);
 })
 .catch(console.error.bind(console));
