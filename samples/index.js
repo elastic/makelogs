@@ -41,11 +41,11 @@ sets.ips = new IpGenerator(100, 1000);
 sets.countries = new WeightedList(require('./countries'));
 
 sets.extensions = new WeightedList({
-  'html': 40,
-  'php': 30,
-  'png': 15,
-  'gif': 5,
-  'css': 10
+  'png': 3,
+  'gif': 2,
+  'jpg': 20,
+  'css': 5,
+  'php': 1,
 });
 
 sets.responseCodes = new WeightedList({
