@@ -59,11 +59,11 @@ module.exports = function createIndex(indexName) {
           },
           geo: {
             properties: {
-              srcdst: {
+              srcdest: {
                 type: 'string',
                 index: 'not_analyzed'
               },
-              dst: {
+              dest: {
                 type: 'string',
                 index: 'not_analyzed'
               },
