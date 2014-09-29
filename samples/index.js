@@ -3,6 +3,7 @@ var WeightedList = require('./weighted_list');
 var RandomList = require('./random_list');
 var IpGenerator = require('./ip_generator');
 var Stochator = require('./stochator');
+var roundAllGets = require('./round_all_gets');
 var argv = require('../argv');
 
 var dayMs = 86400000;
@@ -17,20 +18,7 @@ sets.randomMsInDayRange = function () {
   return _.random(startms, endms);
 };
 
-function roundAllGets (stoch) {
-  var origGet = stoch.get;
-  stoch.get = function () {
-    return Math.round(origGet.call(stoch));
-  };
-  return stoch;
-}
-
-sets.lessRandomRespSize = roundAllGets(new Stochator({
-  mean: 4500,
-  stddev: 4500 * 0.56,
-  min: 1500,
-  max: 10000
-}, 'get'));
+sets.lessRandomRespSize = require('./response_size');
 
 sets.lessRandomMsInDay = roundAllGets(new Stochator({
   min: 0,

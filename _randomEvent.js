@@ -48,11 +48,13 @@ module.exports = function RandomEvent() {
   event.referer = 'http://' + samples.referrers() + '/' + samples.tags() + '/' + samples.astronauts();
   event.agent = samples.userAgents();
   event.clientip = event.ip;
-  event.bytes = event.response < 500 ? samples.lessRandomRespSize() : 0;
+  event.bytes = event.response < 500 ? samples.lessRandomRespSize(event.extension) : 0;
   event.request = '/' + samples.astronauts() + '.' + event.extension;
+
   if (event.extension === 'php') {
     event.phpmemory = event.memory = event.bytes * 40;
   }
+
   event['@message'] = event.ip + ' - - [' + dateAsIso + '] "GET ' + event.request + ' HTTP/1.1" ' +
       event.response + ' ' + event.bytes + ' "-" "' + event.agent + '"';
   event.spaces = 'this   is   a   thing    with lots of     spaces       wwwwoooooo';
