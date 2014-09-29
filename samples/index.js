@@ -88,6 +88,15 @@ sets.types = new WeightedList({
   'apache': 4
 });
 
+sets.stylesheets = new RandomList([
+  'main.css',
+  'app.css',
+  'ads.css',
+  'ad-blocker.css',
+  'pretty-layout.css',
+  'semantic-ui.css'
+]);
+
 module.exports = _.mapValues(sets, function (set) {
   return (typeof set === 'function') ? set : function () {
     return set.get();

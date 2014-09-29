@@ -49,11 +49,28 @@ module.exports = function RandomEvent() {
   event.agent = samples.userAgents();
   event.clientip = event.ip;
   event.bytes = event.response < 500 ? samples.lessRandomRespSize(event.extension) : 0;
-  event.request = '/' + samples.astronauts() + '.' + event.extension;
 
-  if (event.extension === 'php') {
+  switch (event.extension) {
+  case 'php':
+    event.host = 'theacademyofperformingartsandscience.org';
+    event.request = '/people/type:astronauts/name:' + samples.astronauts() + '/profile';
     event.phpmemory = event.memory = event.bytes * 40;
+    break;
+  case 'gif':
+    event.host = 'motion-media.theacademyofperformingartsandscience.org';
+    event.request = '/canhaz/' + samples.astronauts() + '.' + event.extension;
+    break;
+  case 'css':
+    event.host = 'cdn.theacademyofperformingartsandscience.org';
+    event.request = '/styles/' + samples.stylesheets();
+    break;
+  default:
+    event.host = 'media-for-the-masses.theacademyofperformingartsandscience.org';
+    event.request = '/uploads/' + samples.astronauts() + '.' + event.extension;
+    break;
   }
+
+  event.url = 'https://' + event.host + event.request;
 
   event['@message'] = event.ip + ' - - [' + dateAsIso + '] "GET ' + event.request + ' HTTP/1.1" ' +
       event.response + ' ' + event.bytes + ' "-" "' + event.agent + '"';
