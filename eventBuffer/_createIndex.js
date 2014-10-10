@@ -22,6 +22,10 @@ module.exports = function createIndex(indexName) {
     },
     mappings: {
       _default_: {
+        _timestamp: {
+          enabled: true,
+          store: 'yes'
+        },
         properties: {
           '@timestamp': {
             type: 'date'
