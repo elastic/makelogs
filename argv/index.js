@@ -19,7 +19,11 @@ var optimist = require('optimist')
     host: {
       alias: 'h',
       describe: 'The host name and port',
-      default: 'localhost:9200'
+      default: null
+    },
+    auth: {
+      describe: 'user:password when you want to connect to a secured elasticsearch cluster over basic auth',
+      default: null
     },
     shards: {
       alias: 's',

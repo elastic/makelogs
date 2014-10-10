@@ -7,10 +7,11 @@ if (argv.trace) {
   clientConfig.log = 'trace';
 }
 
-if (argv.host) {
-  clientConfig.hosts = argv.host;
-} else if (argv.hosts) {
-  clientConfig.hosts = JSON.parse(argv.hosts);
-}
+clientConfig.hosts = [
+  {
+    host: argv.host,
+    auth: argv.auth
+  }
+];
 
 module.exports = new es.Client(clientConfig);
