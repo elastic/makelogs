@@ -66,9 +66,8 @@ if (argv.help) {
 
 // get the start and end moments
 var moments = require('./_parseDays')(argv);
-moments.sort();
-argv.start = moments[0].startOf('day');
-argv.end = moments[1].endOf('day');
+argv.start = moments[0];
+argv.end = moments[1];
 
 // parsing allows short notation like "10m" or "1b"
 argv.total = require('./_parseCount')(argv);

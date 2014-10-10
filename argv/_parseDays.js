@@ -5,9 +5,13 @@ module.exports = function parseDays(argv) {
   var complexDateRE = /(\-|\+|)\d+,?/g;
   var moments = [];
 
+  var startBase = moment().utc().startOf('day');
+  var endBase = moment().utc().endOf('day');
+
+
   if (_.isNumber(argv.days)) {
-    moments.push(moment().utc().subtract('days', argv.days));
-    moments.push(moment().utc().add('days', argv.days));
+    moments.push(startBase.subtract('days', argv.days));
+    moments.push(endBase.add('days', argv.days));
     return moments;
   }
 
@@ -21,10 +25,10 @@ module.exports = function parseDays(argv) {
       ends.push(ends[0]);
     }
 
-    if (ends.length) {
-      ends.forEach(function (end) {
-        moments.push(moment().utc().add(parseFloat(end[0]), 'days'));
-      });
+    if (ends.length === 2) {
+      ends = ends.slice(0, 2).map(function (n) { return parseFloat(n); }).sort();
+      moments.push(startBase.add('days', ends[0]));
+      moments.push(endBase.add('days', ends[1]));
       return moments;
     }
   }
