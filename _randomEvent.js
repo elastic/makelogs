@@ -34,7 +34,7 @@ module.exports = function RandomEvent() {
   event.response = samples.responseCodes();
 
   event.geo = {
-    coordinates: samples.airports(),
+    coordinates: samples.populated_places(),
     src: samples.countries(),
     dest: samples.countries()
   };
