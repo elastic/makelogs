@@ -48,6 +48,19 @@ module.exports = function createIndex(indexName) {
               }
             }
           },
+          request: {
+            type: 'multi_field',
+            fields: {
+              request: {
+                type: 'string',
+                index: 'analyzed'
+              },
+              raw: {
+                type: 'string',
+                index: 'not_analyzed'
+              }
+            }
+          },
           clientip: {
             type: 'ip'
           },
