@@ -9,7 +9,8 @@ if (argv.trace) {
 
 clientConfig.hosts = [
   {
-    host: argv.host,
+    host: argv.host.split(":")[0],
+    port: argv.host.split(":")[1] ? argv.host.split(":")[1] : "9200",
     auth: argv.auth
   }
 ];
