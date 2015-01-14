@@ -11,7 +11,7 @@ module.exports = function (eventBuffer) {
 
   var queue = async.queue(function (events, done) {
     var body = [];
-    var deps = [];
+    var deps = [client.usable];
     var esBulkQueueOverflow = 0;
 
     events.forEach(function (event) {

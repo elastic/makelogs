@@ -15,9 +15,10 @@ var total = argv.total;
 var startingMoment = argv.start;
 var endingMoment = argv.end;
 
-console.log('Generating', total, 'events from', startingMoment.format(), 'to', endingMoment.format());
-
-Promise.resolve()
+client.usable
+.then(function () {
+  console.log('Generating', total, 'events from', startingMoment.format(), 'to', endingMoment.format());
+})
 .then(function () {
   if (argv.dry) return;
   if (argv.reset) {

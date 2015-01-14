@@ -120,10 +120,13 @@ module.exports = function createIndex(indexName) {
     }
   };
 
-  return client.indices.create({
-    ignore: 400,
-    index: indexName,
-    body: indexBody
+  return client.usable
+  .then(function () {
+    return client.indices.create({
+      ignore: 400,
+      index: indexName,
+      body: indexBody
+    });
   })
   .then(function () {
     return client.cluster.health({
