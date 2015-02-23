@@ -51,7 +51,7 @@ client.usable
     argv.log('creating no more than', i, 'events');
 
     for (; i >= 0; i--) {
-      var event = randomEvent();
+      var event = randomEvent(indexPrefix);
 
       if (argv.dry) {
         console.log('\n\n', event);
