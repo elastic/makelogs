@@ -4,6 +4,32 @@ var client = require('../_client');
 module.exports = function createIndex(indexName) {
   argv.log('ensuring index "%s" exists', indexName);
 
+  var dynamicTemplates = [ {
+    string_fields : {
+      mapping : {
+        type : 'multi_field',
+        doc_values: true,
+        fields : {
+          hash: {
+            type: 'murmur3'
+          },
+          '{name}' : {
+            index : 'analyzed',
+            omit_norms : true,
+            type : 'string',
+          },
+          raw : {
+            index : 'not_analyzed',
+            type : 'string',
+            doc_values: true,
+          }
+        }
+      },
+      match_mapping_type : 'string',
+      match : '*'
+    }
+  }];
+
   var indexBody = {
     settings: {
       index: {
@@ -22,6 +48,7 @@ module.exports = function createIndex(indexName) {
     },
     mappings: {
       _default_: {
+        dynamic_templates : dynamicTemplates,
         _timestamp: {
           enabled: true,
           store: 'yes'
@@ -34,32 +61,6 @@ module.exports = function createIndex(indexName) {
             type: 'integer',
             index: 'not_analyzed',
             include_in_all: false
-          },
-          agent: {
-            type: 'multi_field',
-            fields: {
-              agent: {
-                type: 'string',
-                index: 'analyzed'
-              },
-              raw: {
-                type: 'string',
-                index: 'not_analyzed'
-              }
-            }
-          },
-          request: {
-            type: 'multi_field',
-            fields: {
-              request: {
-                type: 'string',
-                index: 'analyzed'
-              },
-              raw: {
-                type: 'string',
-                index: 'not_analyzed'
-              }
-            }
           },
           clientip: {
             type: 'ip'
