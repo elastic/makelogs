@@ -2,7 +2,7 @@
 
 Simple generator used to push fake HTTP traffic logs into elasticsearch. It uses the node.js client.
 
-Events are pushed into `logstash-YYYY.MM.DD` formatted indices, using the bulk API, and are easily consumed by Kibana.
+Events are pushed into `logstash-YYYY.MM.DD` formatted indices (configurable using `--indexPrefix`), using the bulk API, and are easily consumed by Kibana.
 
 Documents look like this:
 
@@ -63,11 +63,29 @@ Documents look like this:
 npm install -g makelogs
 ```
 
-## to run
+---
 
 ```
-makelogs --count=10m --days=-2,+10
+$ makelogs --help
+A utility to generate sample log data.
+
+Usage: node ./bin/makelogs [options]
+
+Options:
+  --count, -c     Total event that will be created, accepts expressions like "1m" for 1 million (b,m,t,h)       [default: 14000]
+  --days, -d      The number of days ± today or two numbers, seperated by a comma, like "-1,+10" or "-10,+100"  [default: 1]
+  --host, -h      The host name and port                                                                        [default: "localhost:9200"]
+  --auth          user:password when you want to connect to a secured elasticsearch cluster over basic auth     [default: null]
+  --indexPrefix   Name of the prefix of the index                                                               [default: "logstash-"]
+  --shards, -s    The number of primary shards                                                                  [default: 1]
+  --replicas, -r  The number of replica shards                                                                  [default: 0]
+  --dry           Test/Parse your arguments, but don't actually do anything                                     [default: false]
+  --help          This help message
+  --reset         Clear all logstash-* indices before genrating logs
+  --verbose       Log more info to the console
+  --trace         Log every request to elastisearch, including request bodies. BE CAREFULL
 ```
+
 
 The tool is, admittedly, not super configurable. Just tell it how many events you want, how many days to generate data for, and it will cruise.
 
