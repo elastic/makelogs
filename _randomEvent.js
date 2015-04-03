@@ -1,6 +1,6 @@
 var samples = require('./samples');
 
-module.exports = function RandomEvent() {
+module.exports = function RandomEvent(indexPrefix) {
   var event = {};
 
   // random date, plus less random time
@@ -24,7 +24,7 @@ module.exports = function RandomEvent() {
   date.setUTCHours(hours, minutes, seconds, ms);
 
   var dateAsIso = date.toISOString();
-  var indexName = 'logstash-' +
+  var indexName = indexPrefix +
     dateAsIso.substr(0, 4) + '.' + dateAsIso.substr(5, 2) + '.' + dateAsIso.substr(8, 2);
 
   event.index = indexName;

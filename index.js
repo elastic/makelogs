@@ -14,6 +14,7 @@ var argv = require('./argv');
 var total = argv.total;
 var startingMoment = argv.start;
 var endingMoment = argv.end;
+var indexPrefix  = argv.indexPrefix;
 
 client.usable
 .then(function () {
@@ -22,9 +23,9 @@ client.usable
 .then(function () {
   if (argv.dry) return;
   if (argv.reset) {
-    argv.log('clearing existing logstash-* indices');
+    argv.log('clearing existing '+indexPrefix+'* indices');
     return client.indices.delete({
-      index: 'logstash-*'
+      index: indexPrefix+'*'
     });
   }
 })
@@ -50,7 +51,7 @@ client.usable
     argv.log('creating no more than', i, 'events');
 
     for (; i >= 0; i--) {
-      var event = randomEvent();
+      var event = randomEvent(indexPrefix);
 
       if (argv.dry) {
         console.log('\n\n', event);

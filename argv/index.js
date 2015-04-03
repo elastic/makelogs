@@ -25,6 +25,10 @@ var optimist = require('optimist')
       describe: 'user:password when you want to connect to a secured elasticsearch cluster over basic auth',
       default: null
     },
+    indexPrefix: {
+      describe: 'Name of the prefix of the index',
+      default: 'logstash-'
+    },
     shards: {
       alias: 's',
       describe: 'The number of primary shards',
