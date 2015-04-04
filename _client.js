@@ -3,15 +3,16 @@ var _ = require('lodash');
 var Promise = require('bluebird');
 var through2 = require('through2');
 var parse = require('url').parse;
-var Client = require('elasticsearch').Client;
-var NoConnections = require('elasticsearch').errors.NoConnections;
-var RequestTimeout = require('elasticsearch').errors.RequestTimeout;
+var elasticsearch = require('elasticsearch');
+var Client = elasticsearch.Client;
+var NoConnections = elasticsearch.errors.NoConnections;
+var RequestTimeout = elasticsearch.errors.RequestTimeout;
 
 var host = String(argv.host);
 var proto = _.contains(host, '//') ? '' : '//';
 var parsed = parse(proto + host, false, true);
 
-var ms = 1000;
+var ms = 5000;
 var client = module.exports = new Client({
   log: {
     type: 'stream',

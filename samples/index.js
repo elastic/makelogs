@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var WeightedList = require('./weighted_list');
 var RandomList = require('./random_list');
+var RandomSample = require('./random_sample');
 var IpGenerator = require('./ip_generator');
 var Stochator = require('./stochator');
 var roundAllGets = require('./round_all_gets');
@@ -96,6 +97,8 @@ sets.stylesheets = new RandomList([
   'pretty-layout.css',
   'semantic-ui.css'
 ]);
+
+sets.relatedContent = new RandomSample(0, 5, require('./_content'));
 
 module.exports = _.mapValues(sets, function (set) {
   return (typeof set === 'function') ? set : function () {

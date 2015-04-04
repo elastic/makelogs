@@ -1,6 +1,7 @@
 var eventBuffer = [];
 var argv = require('../argv');
 var Promise = require('bluebird');
+var omitFields = require('./_omitFields');
 var bulkQueue = require('./_bulkQueue')(eventBuffer);
 
 eventBuffer.push = function (event) {
@@ -8,7 +9,7 @@ eventBuffer.push = function (event) {
   if (event === false) {
     eventBuffer.final = true;
   } else {
-    Array.prototype.push.call(eventBuffer, event);
+    Array.prototype.push.call(eventBuffer, omitFields(event));
   }
 
   if (eventBuffer.length === 3000 || eventBuffer.final) {

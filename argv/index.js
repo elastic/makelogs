@@ -1,4 +1,9 @@
 var _ = require('lodash');
+var join = require('path').join;
+var read = require('fs').readFileSync;
+
+var OMIT_HELP_PATH = join(__dirname, 'omitFormatting.txt');
+
 var optimist = require('optimist')
   .usage('A utility to generate sample log data.\n\nUsage: $0 [options]')
   .options({
@@ -58,6 +63,11 @@ var optimist = require('optimist')
     trace: {
       describe: 'Log every request to elastisearch, including request bodies. BE CAREFULL',
       type: 'boolean'
+    },
+    omit: {
+      alias: 'o',
+      describe: 'Omit a field from every event. See "formatting an omit path"',
+      type: 'string'
     }
   });
 
@@ -65,6 +75,8 @@ var argv = optimist.argv;
 
 if (argv.help) {
   optimist.showHelp(console.log);
+  console.log(read(OMIT_HELP_PATH, 'utf8'));
+
   process.exit();
 }
 

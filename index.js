@@ -76,4 +76,6 @@ client.usable
   if (argv.dry) return;
   eventBuffer.push(false);
 })
-.catch(console.error.bind(console));
+.catch(function (err) {
+  console.error(err.stack);
+});

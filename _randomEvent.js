@@ -86,6 +86,8 @@ module.exports = function RandomEvent(indexPrefix) {
     'www.' + samples.referrers()
   ];
 
+  event.relatedContent = samples.relatedContent();
+
   event.machine = {
     os: samples.randomOs(),
     ram: samples.randomRam()
