@@ -1,5 +1,6 @@
 var argv = require('../argv');
 var client = require('../_client');
+var omitFields = require('./_omitFields');
 
 module.exports = function createIndex(indexName) {
   argv.log('ensuring index "%s" exists', indexName);
@@ -53,7 +54,7 @@ module.exports = function createIndex(indexName) {
           enabled: true,
           store: 'yes'
         },
-        properties: {
+        properties: omitFields({
           '@timestamp': {
             type: 'date'
           },
@@ -116,7 +117,7 @@ module.exports = function createIndex(indexName) {
               }
             }
           }
-        }
+        }, true)
       }
     }
   };

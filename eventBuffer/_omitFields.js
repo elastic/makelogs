@@ -8,9 +8,10 @@ if (!argv.omit) {
 
 var paths = (_.isArray(argv.omit) ? argv.omit : [argv.omit]).map(parseStringPropertyPath);
 
-module.exports = function (event) {
+module.exports = function (body, isFieldMap) {
+  isFieldMap = !!isFieldMap;
   paths.forEach(function (path) {
-    unDefine(event.body, path);
+    unDefine(body, path);
   });
 
   function unDefine(obj, path) {
@@ -27,7 +28,12 @@ module.exports = function (event) {
       walkIn(next, path);
     }
     else if (next) {
-      unDefine(next, path);
+      // FIXME Make this prettier
+      if(isFieldMap) {
+        unDefine(next.properties, path);
+      } else {
+        unDefine(next, path);
+      }
     }
 
     path.unshift(step);
@@ -41,7 +47,7 @@ module.exports = function (event) {
     });
   }
 
-  return event;
+  return body;
 };
 
 
