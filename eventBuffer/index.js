@@ -9,7 +9,8 @@ eventBuffer.push = function (event) {
   if (event === false) {
     eventBuffer.final = true;
   } else {
-    Array.prototype.push.call(eventBuffer, omitFields(event));
+    omitFields(event.body);
+    Array.prototype.push.call(eventBuffer, event);
   }
 
   if (eventBuffer.length === 3000 || eventBuffer.final) {
