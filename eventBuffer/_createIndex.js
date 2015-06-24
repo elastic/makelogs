@@ -5,29 +5,29 @@ var omitFields = require('./_omitFields');
 module.exports = function createIndex(indexName) {
   argv.log('ensuring index "%s" exists', indexName);
 
-  var dynamicTemplates = [ {
-    string_fields : {
-      mapping : {
-        type : 'multi_field',
+  var dynamicTemplates = [{
+    string_fields: {
+      mapping: {
+        type: 'multi_field',
         doc_values: true,
-        fields : {
+        fields: {
           hash: {
             type: 'murmur3'
           },
-          '{name}' : {
-            index : 'analyzed',
-            omit_norms : true,
-            type : 'string',
+          '{name}': {
+            index: 'analyzed',
+            omit_norms: true,
+            type: 'string',
           },
-          raw : {
-            index : 'not_analyzed',
-            type : 'string',
+          raw: {
+            index: 'not_analyzed',
+            type: 'string',
             doc_values: true,
           }
         }
       },
-      match_mapping_type : 'string',
-      match : '*'
+      match_mapping_type: 'string',
+      match: '*'
     }
   }];
 
@@ -49,10 +49,9 @@ module.exports = function createIndex(indexName) {
     },
     mappings: {
       _default_: {
-        dynamic_templates : dynamicTemplates,
+        dynamic_templates: dynamicTemplates,
         _timestamp: {
-          enabled: true,
-          store: 'yes'
+          enabled: true
         },
         properties: omitFields({
           '@timestamp': {
