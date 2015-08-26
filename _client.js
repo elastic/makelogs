@@ -12,13 +12,18 @@ var host = String(argv.host);
 var proto = _.contains(host, '//') ? '' : '//';
 var parsed = parse(proto + host, false, true);
 
+var makeUseable;
+var usable = new Promise(function (resolve) {
+  makeUseable = resolve;
+});
+
 var ms = 5000;
 var client = module.exports = new Client({
   log: {
     type: 'stream',
     level: argv.trace ? 'trace' : 'warning',
     stream: through2(function (chunk, enc, cb) {
-      client.usable.then(function () {
+      usable.then(function () {
         process.stdout.write(chunk, enc);
         cb();
       });
@@ -31,8 +36,13 @@ var client = module.exports = new Client({
   }
 });
 
-client.usable = client.ping({
+client.usable = usable;
+
+client.ping({
   requestTimeout: ms
+})
+.then(function () {
+  makeUseable();
 })
 .catch(function (err) {
   var notAlive = err instanceof NoConnections;
