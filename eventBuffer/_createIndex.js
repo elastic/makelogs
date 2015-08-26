@@ -11,9 +11,6 @@ module.exports = function createIndex(indexName) {
         type: 'multi_field',
         doc_values: true,
         fields: {
-          hash: {
-            type: 'murmur3'
-          },
           '{name}': {
             index: 'analyzed',
             omit_norms: true,
