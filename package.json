@@ -1,6 +1,6 @@
 {
   "name": "makelogs",
-  "version": "1.6.1",
+  "version": "2.0.0-0",
   "description": "Simple log generator for testing kibana",
   "main": "index.js",
   "scripts": {
