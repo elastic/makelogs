@@ -4,6 +4,7 @@ var Promise = require('bluebird');
 var argv = require('../argv');
 var createIndex = require('./_createIndex');
 var client = require('../_client');
+var _ = require('lodash');
 
 module.exports = function (eventBuffer) {
   // track the indices that we have ensured exist
@@ -40,10 +41,17 @@ module.exports = function (eventBuffer) {
     .then(function (resp) {
       if (resp.errors) {
         resp.items.forEach(function (item, i) {
-          if (item.index.error) {
-            if (item.index.error.match(/^EsRejectedExecutionException/)) {
+          var error = (item.index || item.create).error;
+          if (_.isPlainObject(error) && error.reason) {
+            error = error.reason;
+          }
+          if (error) {
+            if (error.match(/^EsRejectedExecutionException/)) {
               esBulkQueueOverflow ++;
               eventBuffer.push(events[i]);
+            } else {
+              console.error(error);
+              process.exit();
             }
           }
         });
