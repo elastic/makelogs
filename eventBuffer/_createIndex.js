@@ -60,10 +60,10 @@ module.exports = function createIndex(indexName) {
             include_in_all: false
           },
           clientip: {
-            type: 'ip'
+            type: 'string'
           },
           ip: {
-            type: 'ip'
+            type: 'string'
           },
           memory: {
             type: 'double'
