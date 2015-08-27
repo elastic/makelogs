@@ -1,6 +1,8 @@
-# Log Generator
+# makelogs 2.0
 
 Simple generator used to push fake HTTP traffic logs into elasticsearch. It uses the node.js client.
+
+This version of makelogs is designed to work with elasticsearch 2.0, and is not compatible with elasticsearch 1.x.
 
 Events are pushed into `logstash-YYYY.MM.DD` formatted indices (configurable using `--indexPrefix`), using the bulk API, and are easily consumed by Kibana.
 
@@ -69,7 +71,7 @@ then run `makelogs --help` for usage info:
 $ ./bin/makelogs --help
 A utility to generate sample log data.
 
-Usage: node ./bin/makelogs [options]
+Usage: node ./bin/makelogs@beta [options]
 
 Options:
   ...
