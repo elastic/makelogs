@@ -10,8 +10,8 @@ module.exports = function parseDays(argv) {
 
 
   if (_.isNumber(argv.days)) {
-    moments.push(startBase.subtract('days', argv.days));
-    moments.push(endBase.add('days', argv.days));
+    moments.push(startBase.subtract(argv.days, 'days'));
+    moments.push(endBase.add(argv.days, 'days'));
     return moments;
   }
 
