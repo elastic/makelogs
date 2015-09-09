@@ -22,19 +22,19 @@
     "traffic"
   ],
   "author": "Spencer Alger",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/spenceralger/makelogs/issues"
   },
   "homepage": "https://github.com/spenceralger/makelogs",
   "dependencies": {
-    "async": "~0.9.0",
-    "bluebird": "~2.1.2",
-    "elasticsearch": "^4.0.2",
+    "async": "^1.4.2",
+    "bluebird": "^2.10.0",
+    "elasticsearch": "^8.1.0",
     "lodash": "~2.4.1",
-    "moment": "~2.7.0",
+    "moment": "^2.10.6",
     "optimist": "~0.6.1",
-    "through2": "~0.6.3",
-    "update-notifier": "~0.2.1"
+    "through2": "^2.0.0",
+    "update-notifier": "^0.5.0"
   }
 }
