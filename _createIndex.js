@@ -131,25 +131,30 @@ module.exports = function createIndex() {
     })
   })
   .then(function (exists) {
-    if (exists) {
-      if (argv.reset) {
-        exists = false
-        console.log('clearing existing "%s" index template', indexTemplate);
-        return client.indices.deleteTemplate({
-          name: indexTemplateName
-        });
-      } else {
-        console.log('index template for "%s" already exists, use --reset to recreate it', indexTemplate);
-      }
+    function clearExisting() {
+      console.log('clearing existing "%s" index template', indexTemplate);
+      return client.indices.deleteTemplate({
+        name: indexTemplateName
+      });
     }
 
-    if (!exists) {
+    function create() {
       console.log('creating index template for "%s"', indexTemplate);
       return client.indices.putTemplate({
         ignore: 400,
         name: indexTemplateName,
         body: body
       });
+    }
+
+    if (exists) {
+      if (argv.reset) {
+        return clearExisting().then(create);
+      } else {
+        console.log('index template for "%s" already exists, use --reset to recreate it', indexTemplate);
+      }
+    } else {
+      return create();
     }
   })
   .then(function () {
