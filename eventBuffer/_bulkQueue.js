@@ -2,32 +2,19 @@ var async = require('async');
 var Promise = require('bluebird');
 
 var argv = require('../argv');
-var createIndex = require('./_createIndex');
 var client = require('../_client');
 var _ = require('lodash');
 
 module.exports = function (eventBuffer) {
-  // track the indices that we have ensured exist
-  var checkedIndice = {};
-
   var queue = async.queue(function (events, done) {
     var body = [];
-    var deps = [client.usable];
     var esBulkQueueOverflow = 0;
 
     events.forEach(function (event) {
-      var header = event.header;
-      event = event.body;
-
-      if (checkedIndice[event.index] !== true) {
-        deps.push(createIndex(event.index));
-        checkedIndice[event.index] = true;
-      }
-
-      body.push({ index: header }, event);
+      body.push({ index: event.header }, event.body);
     });
 
-    Promise.all(deps)
+    Promise.resolve(client.usable)
     .then(function () {
       if (body.length) {
         argv.log('sending', body.length / 2, 'bulk requests');
@@ -56,6 +43,10 @@ module.exports = function (eventBuffer) {
           }
         });
       }
+    })
+    .catch(function (err) {
+      console.error(err.stack);
+      throw err;
     })
     .finally(function () {
       if (esBulkQueueOverflow) {

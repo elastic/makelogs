@@ -9,6 +9,7 @@ var client = require('./_client');
 var randomEvent = require('./_randomEvent');
 var samples = require('./samples');
 var eventBuffer = require('./eventBuffer');
+var createIndex = require('./_createIndex');
 var argv = require('./argv');
 
 var total = argv.total;
@@ -22,12 +23,7 @@ client.usable
 })
 .then(function () {
   if (argv.dry) return;
-  if (argv.reset) {
-    argv.log('clearing existing '+indexPrefix+'* indices');
-    return client.indices.delete({
-      index: indexPrefix+'*'
-    });
-  }
+  return createIndex();
 })
 .then(function () {
   if (argv.dry) return;

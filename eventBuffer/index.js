@@ -1,7 +1,7 @@
 var eventBuffer = [];
 var argv = require('../argv');
 var Promise = require('bluebird');
-var omitFields = require('./_omitFields');
+var omitFields = require('../_omitFields');
 var bulkQueue = require('./_bulkQueue')(eventBuffer);
 
 eventBuffer.push = function (event) {

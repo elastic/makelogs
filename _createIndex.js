@@ -1,42 +1,21 @@
-var argv = require('../argv');
-var client = require('../_client');
+var argv = require('./argv');
+var client = require('./_client');
 var omitFields = require('./_omitFields');
 
-module.exports = function createIndex(indexName) {
-  argv.log('ensuring index "%s" exists', indexName);
+module.exports = function createIndex() {
+  var indexTemplate = argv.indexPrefix + '*'
+  var indexTemplateName = 'makelogs_index_template__' + argv.indexPrefix;
 
-  var dynamicTemplates = [{
-    string_fields: {
-      mapping: {
-        type: 'multi_field',
-        doc_values: true,
-        fields: {
-          '{name}': {
-            index: 'analyzed',
-            omit_norms: true,
-            type: 'string',
-          },
-          raw: {
-            index: 'not_analyzed',
-            type: 'string',
-            doc_values: true,
-          }
-        }
-      },
-      match_mapping_type: 'string',
-      match: '*'
-    }
-  }];
-
-  var indexBody = {
+  var body = {
+    template: indexTemplate,
     settings: {
       index: {
         number_of_shards: argv.shards,
-        number_of_replicas: argv.replicas
+        number_of_replicas: argv.replicas,
       },
       analysis: {
         analyzer: {
-          url: {
+          makelogs_url: {
             type: 'standard',
             tokenizer: 'uax_url_email',
             max_token_length: 1000
@@ -46,10 +25,37 @@ module.exports = function createIndex(indexName) {
     },
     mappings: {
       _default_: {
-        dynamic_templates: dynamicTemplates,
+        dynamic_templates: [
+          {
+            string_fields: {
+              match_mapping_type: 'string',
+              match: '*',
+
+              mapping: {
+                type: 'string',
+                index: 'analyzed',
+                omit_norms: true,
+                doc_values: false,
+                type: 'string',
+
+                fields: {
+                  raw: {
+                    index: 'not_analyzed',
+                    type: 'string',
+                    doc_values: true,
+                  }
+                }
+              }
+            }
+          }
+        ],
+
+        // meta fields
         _timestamp: {
           enabled: true
         },
+
+        // properties
         properties: omitFields({
           '@timestamp': {
             type: 'date'
@@ -116,20 +122,41 @@ module.exports = function createIndex(indexName) {
         }, true)
       }
     }
-  };
+  }
 
   return client.usable
   .then(function () {
-    return client.indices.create({
-      ignore: 400,
-      index: indexName,
-      body: indexBody
-    });
+    return client.indices.existsTemplate({
+      name: indexTemplateName
+    })
+  })
+  .then(function (exists) {
+    if (exists) {
+      if (argv.reset) {
+        exists = false
+        console.log('clearing existing "%s" index template', indexTemplate);
+        return client.indices.deleteTemplate({
+          name: indexTemplateName
+        });
+      } else {
+        console.log('index template for "%s" already exists, use --reset to recreate it', indexTemplate);
+      }
+    }
+
+    if (!exists) {
+      console.log('creating index template for "%s"', indexTemplate);
+      return client.indices.putTemplate({
+        ignore: 400,
+        name: indexTemplateName,
+        body: body
+      });
+    }
   })
   .then(function () {
-    return client.cluster.health({
-      index: indexName,
-      waitForStatus: 'yellow'
-    });
+    if (argv.reset) {
+      return client.indices.delete({
+        index: indexTemplate
+      })
+    }
   });
 };

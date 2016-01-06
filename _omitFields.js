@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var argv = require('../argv');
+var argv = require('./argv');
 
 if (!argv.omit) {
   module.exports = _.identity;
