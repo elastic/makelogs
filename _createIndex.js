@@ -1,6 +1,9 @@
+var Promise = require('bluebird');
+
 var argv = require('./argv');
 var client = require('./_client');
 var omitFields = require('./_omitFields');
+var confirmReset = require('./_confirmReset');
 
 module.exports = function createIndex() {
   var indexTemplate = argv.indexPrefix + '*'
@@ -126,16 +129,26 @@ module.exports = function createIndex() {
 
   return client.usable
   .then(function () {
-    return client.indices.existsTemplate({
-      name: indexTemplateName
-    })
+    return Promise.props({
+      template: client.indices.existsTemplate({
+        name: indexTemplateName
+      }),
+      indices: client.indices.exists({
+        index: indexTemplate
+      })
+    });
   })
   .then(function (exists) {
     function clearExisting() {
-      console.log('clearing existing "%s" index template', indexTemplate);
-      return client.indices.deleteTemplate({
-        name: indexTemplateName
-      });
+      console.log('clearing existing "%s" index templates and indices', indexTemplate);
+      return Promise.all([
+        client.indices.deleteTemplate({
+          name: indexTemplateName
+        }),
+        client.indices.delete({
+          index: indexTemplate
+        })
+      ]);
     }
 
     function create() {
@@ -147,21 +160,25 @@ module.exports = function createIndex() {
       });
     }
 
-    if (exists) {
-      if (argv.reset) {
+    function maybeReset(reset) {
+      switch (reset) {
+      case true:
         return clearExisting().then(create);
-      } else {
-        console.log('index template for "%s" already exists, use --reset to recreate it', indexTemplate);
+      case false:
+        if (!exists.indices) {
+          return create();
+        } else {
+          return; // do nothing, index template exists
+        }
+      default:
+        return confirmReset().then(maybeReset);
       }
+    }
+
+    if (exists.template || exists.indices) {
+      return maybeReset(argv.reset);
     } else {
       return create();
-    }
-  })
-  .then(function () {
-    if (argv.reset) {
-      return client.indices.delete({
-        index: indexTemplate
-      })
     }
   });
 };

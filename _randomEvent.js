@@ -1,10 +1,51 @@
 var samples = require('./samples');
+var argv = require('./argv');
+
+var eventCounter = -1;
+var count = argv.total;
+
+
+
+var countOfDays = (function () {
+  var cursor = argv.start.clone();
+  var count = 0;
+  var end = argv.end.valueOf();
+
+  if (cursor.valueOf() <= end) {
+    do {
+      cursor.add(1, 'day');
+      count += 1;
+    } while (cursor.valueOf() <= end)
+  }
+
+  return count;
+}());
+var countPerDay = Math.ceil(count / countOfDays);
+
+var indexInterval = argv.indexInterval;
+var indexPrefix = argv.indexPrefix;
+
+var dayMoment = argv.start.clone();
+var day;
 
 module.exports = function RandomEvent(indexPrefix) {
   var event = {};
 
-  // random date, plus less random time
-  var date = new Date(samples.randomMsInDayRange());
+  var i = ++eventCounter;
+  var iInDay = i % countPerDay;
+
+  if (day && iInDay === 0) {
+    dayMoment.add(1, 'day');
+    day = null;
+  }
+
+  if (day == null) {
+    day = {
+      year: dayMoment.year(),
+      month: dayMoment.month(),
+      date: dayMoment.date(),
+    };
+  }
 
   var ms = samples.lessRandomMsInDay();
 
@@ -21,13 +62,26 @@ module.exports = function RandomEvent(indexPrefix) {
   ms = ms - seconds * 1000;
 
   // apply the values found to the date
-  date.setUTCHours(hours, minutes, seconds, ms);
-
+  var date = new Date(day.year, day.month, day.date, hours, minutes, seconds, ms);
   var dateAsIso = date.toISOString();
-  var indexName = indexPrefix +
-    dateAsIso.substr(0, 4) + '.' + dateAsIso.substr(5, 2) + '.' + dateAsIso.substr(8, 2);
 
-  event.index = indexName;
+  switch (indexInterval) {
+    case 'yearly':
+      event.index = indexPrefix + dateAsIso.substr(0, 4);
+      break;
+
+    case 'monthly':
+      event.index = indexPrefix + dateAsIso.substr(0, 4) + '.' + dateAsIso.substr(5, 2);
+      break;
+    case 'daily':
+      event.index = indexPrefix + dateAsIso.substr(0, 4) + '.' + dateAsIso.substr(5, 2) + dateAsIso.substr(8, 2);
+      break;
+
+    default:
+      event.index = indexPrefix + Math.floor(i / indexInterval)
+      break;
+  }
+
   event['@timestamp'] = dateAsIso;
   event.ip = samples.ips();
   event.extension = samples.extensions();

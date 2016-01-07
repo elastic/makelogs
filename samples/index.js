@@ -8,18 +8,8 @@ var roundAllGets = require('./round_all_gets');
 var argv = require('../argv');
 
 var dayMs = 86400000;
-var startingMoment = argv.start;
-var endingMoment = argv.end;
 
 var sets = {};
-var startms = startingMoment.toDate().getTime();
-var endms = endingMoment.toDate().getTime();
-
-sets.randomMsInDayRange = function () {
-  return _.random(startms, endms);
-};
-
-sets.lessRandomRespSize = require('./response_size');
 
 sets.lessRandomMsInDay = roundAllGets(new Stochator({
   min: 0,
@@ -28,6 +18,7 @@ sets.lessRandomMsInDay = roundAllGets(new Stochator({
   stdev: dayMs * 0.15,
 }, 'get'));
 
+sets.lessRandomRespSize = require('./response_size');
 sets.randomRam = new RandomList(require('./ram'));
 sets.randomOs = new RandomList(require('./os'));
 

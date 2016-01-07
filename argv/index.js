@@ -53,8 +53,9 @@ var optimist = require('optimist')
       type: 'boolean'
     },
     reset: {
-      describe: 'Clear all logstash-* indices before genrating logs',
-      type: 'boolean'
+      describe: 'Clear all {prefix}-* indices and the makelogs index template before genrating',
+      type: 'boolean',
+      default: null
     },
     verbose: {
       describe: 'Log more info to the console',
@@ -68,6 +69,11 @@ var optimist = require('optimist')
       alias: 'o',
       describe: 'Omit a field from every event. See "formatting an omit path"',
       type: 'string'
+    },
+    indexInterval: {
+      alias: 'i',
+      describe: 'The interval that indices should roll over, either "daily", "monthly", "yearly", or a number of documents.',
+      default: 100000
     }
   });
 
@@ -78,6 +84,20 @@ if (argv.help) {
   console.log(read(OMIT_HELP_PATH, 'utf8'));
 
   process.exit();
+}
+
+switch (argv.indexInterval) {
+  case 'daily':
+  case 'weekly':
+  case 'monthly':
+  case 'yearly':
+    break;
+  default:
+    argv.indexInterval = parseInt(argv.indexInterval, 10);
+    if (isNaN(argv.indexInterval)) {
+      throw new Error('invalid indexInterval');
+    }
+    break;
 }
 
 // get the start and end moments
