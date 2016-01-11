@@ -143,9 +143,11 @@ module.exports = function createIndex() {
       console.log('clearing existing "%s" index templates and indices', indexTemplate);
       return Promise.all([
         client.indices.deleteTemplate({
+          ignore: 404,
           name: indexTemplateName
         }),
         client.indices.delete({
+          ignore: 404,
           index: indexTemplate
         })
       ]);
