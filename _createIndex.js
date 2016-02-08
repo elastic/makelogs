@@ -65,7 +65,7 @@ module.exports = function createIndex() {
           },
           id: {
             type: 'integer',
-            index: 'not_analyzed',
+            index: 'true',
             include_in_all: false
           },
           clientip: {
@@ -116,7 +116,7 @@ module.exports = function createIndex() {
                   },
                   lastname: {
                     type: 'integer',
-                    index: 'not_analyzed'
+                    index: 'true'
                   }
                 }
               }
