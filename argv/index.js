@@ -111,8 +111,7 @@ argv.total = require('./_parseCount')(argv);
 
 // since logging is based on the verbose command line flag??
 argv.log = argv.verbose ? _.bind(console.log, console) : _.noop;
-argv.progress = argv.verbose
-  ? _.bind(console.log, console, 'bulk request complete\n')
-  : _.bind(process.stdout.write, process.stdout, '.');
+
+require('./_progress')(argv);
 
 module.exports = argv;

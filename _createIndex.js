@@ -39,7 +39,6 @@ module.exports = function createIndex() {
                 index: 'analyzed',
                 omit_norms: true,
                 doc_values: false,
-                type: 'string',
 
                 fields: {
                   raw: {

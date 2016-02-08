@@ -4,11 +4,17 @@ var Promise = require('bluebird');
 var argv = require('../argv');
 var client = require('../_client');
 var _ = require('lodash');
+var first = true;
 
 module.exports = function (eventBuffer) {
   var queue = async.queue(function (events, done) {
     var body = [];
     var esBulkQueueOverflow = 0;
+
+    if (first) {
+      argv.startedIndexing();
+      first = false;
+    }
 
     events.forEach(function (event) {
       body.push({ index: event.header }, event.body);
@@ -26,6 +32,7 @@ module.exports = function (eventBuffer) {
       }
     })
     .then(function (resp) {
+      var eventCount = resp.items.length;
       if (resp.errors) {
         resp.items.forEach(function (item, i) {
           var error = (item.index || item.create).error;
@@ -33,6 +40,8 @@ module.exports = function (eventBuffer) {
             error = error.reason;
           }
           if (error) {
+            eventCount -= 1;
+
             if (error.match(/^EsRejectedExecutionException/)) {
               esBulkQueueOverflow ++;
               eventBuffer.push(events[i]);
@@ -43,6 +52,8 @@ module.exports = function (eventBuffer) {
           }
         });
       }
+
+      argv.progress(eventCount);
     })
     .catch(function (err) {
       console.error(err.stack);
@@ -50,16 +61,11 @@ module.exports = function (eventBuffer) {
     })
     .finally(function () {
       if (esBulkQueueOverflow) {
-        process.stdout.write('w' + esBulkQueueOverflow + '-');
-
         // pause for 10ms per queue overage
         queue.pause();
         setTimeout(function () {
           queue.resume();
         }, 10 * esBulkQueueOverflow);
-
-      } else {
-        argv.progress();
       }
     })
     .nodeify(done);
@@ -68,7 +74,7 @@ module.exports = function (eventBuffer) {
   queue.drain = function () {
     if (eventBuffer.final && eventBuffer.length === 0) {
       client.close();
-      process.stdout.write('.\n\ncreated ' + argv.total + ' events\n\n');
+      argv.doneIndexing();
     } else {
       eventBuffer.flush();
     }
