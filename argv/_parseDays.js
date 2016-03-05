@@ -26,9 +26,9 @@ module.exports = function parseDays(argv) {
     }
 
     if (ends.length === 2) {
-      ends = ends.slice(0, 2).map(function (n) { return parseFloat(n); }).sort();
-      moments.push(startBase.add('days', ends[0]));
-      moments.push(endBase.add('days', ends[1]));
+      ends = ends.slice(0, 2).map(function (n) { return Math.abs(parseFloat(n)); });
+      moments.push(startBase.subtract(ends[0], 'days'));
+      moments.push(endBase.add(ends[1], 'days'));
       return moments;
     }
   }
