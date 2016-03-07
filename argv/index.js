@@ -17,8 +17,9 @@ var optimist = require('optimist')
       alias: 'd',
       type: 'number',
       required: true,
-      describe: 'The number of days ± today or two numbers, seperated by a comma' +
-        ', like "-1,+10" or "-10,+100"',
+      describe: 'The number of days ± today or two numbers seperated by a slash to represent ' +
+        'the number of days back/forward data should be generated for' +
+        ', e.g. "1/10" to generate back one day, and forward 10',
       default: 1
     },
     host: {
