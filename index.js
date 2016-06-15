@@ -26,21 +26,6 @@ client.usable
   return createIndex();
 })
 .then(function () {
-  if (argv.dry) return;
-  argv.log('setting the bulk threadpool size to unlimited');
-  return client.cluster.putSettings({
-    body: {
-      transient: {
-        threadpool: {
-          bulk: {
-            queue_size: -1
-          }
-        }
-      }
-    }
-  });
-})
-.then(function () {
   argv.log('creating', total, 'events');
   var i = total;
   return (function crunch() {
