@@ -52,11 +52,6 @@ module.exports = function createIndex() {
           }
         ],
 
-        // meta fields
-        _timestamp: {
-          enabled: true
-        },
-
         // properties
         properties: omitFields({
           '@timestamp': {
