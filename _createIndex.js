@@ -155,7 +155,6 @@ module.exports = function createIndex() {
     function create() {
       console.log('creating index template for "%s"', indexTemplate);
       return client.indices.putTemplate({
-        ignore: 400,
         name: indexTemplateName,
         body: body
       });
