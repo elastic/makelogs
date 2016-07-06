@@ -1,4 +1,5 @@
 var ProgressBar = require('progress');
+var _ = require('lodash');
 
 module.exports = function (argv) {
   var start;
@@ -6,7 +7,7 @@ module.exports = function (argv) {
   var progressBar;
 
   argv.startedIndexing = function () {
-    start = Date.now()
+    start = Date.now();
   };
 
   argv.pausing = function () {
@@ -27,7 +28,7 @@ module.exports = function (argv) {
         progressBar.destroy = function() {
           progressBar.terminate();
           fallbackUpdateTimeout = clearTimeout(fallbackUpdateTimeout);
-        }
+        };
       }
 
       progressBar.tick(indexedCount || 0);

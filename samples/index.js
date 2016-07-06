@@ -5,7 +5,6 @@ var RandomSample = require('./random_sample');
 var IpGenerator = require('./ip_generator');
 var Stochator = require('./stochator');
 var roundAllGets = require('./round_all_gets');
-var argv = require('../argv');
 
 var dayMs = 86400000;
 

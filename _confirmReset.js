@@ -4,7 +4,7 @@ var Promise = require('bluebird');
 var argv = require('./argv');
 
 module.exports = function () {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     if (argv.reset != null) return resolve();
 
     inquirer.prompt([
@@ -17,5 +17,5 @@ module.exports = function () {
     ], function(answers) {
       resolve(answers.reset);
     });
-  })
+  });
 };

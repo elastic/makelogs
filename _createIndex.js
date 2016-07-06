@@ -6,7 +6,7 @@ var omitFields = require('./_omitFields');
 var confirmReset = require('./_confirmReset');
 
 module.exports = function createIndex() {
-  var indexTemplate = argv.indexPrefix + '*'
+  var indexTemplate = argv.indexPrefix + '*';
   var indexTemplateName = 'makelogs_index_template__' + argv.indexPrefix;
 
   var body = {
@@ -119,7 +119,7 @@ module.exports = function createIndex() {
         }, true)
       }
     }
-  }
+  };
 
   return client.usable
   .then(function () {
@@ -162,9 +162,8 @@ module.exports = function createIndex() {
       case false:
         if (!exists.indices) {
           return create();
-        } else {
-          return; // do nothing, index template exists
         }
+        return; // do nothing, index template exists
       default:
         return confirmReset().then(maybeReset);
       }

@@ -4,7 +4,8 @@
   "description": "Simple log generator for testing kibana",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "jshint": "jshint _* index.js samples bin"
   },
   "bin": {
     "makelogs": "./bin/makelogs"
@@ -38,5 +39,8 @@
     "progress": "^1.1.8",
     "through2": "^2.0.0",
     "update-notifier": "^0.5.0"
+  },
+  "devDependencies": {
+    "jshint": "^2.9.2"
   }
 }

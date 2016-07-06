@@ -15,7 +15,7 @@ var countOfDays = (function () {
     do {
       cursor.add(1, 'day');
       count += 1;
-    } while (cursor.valueOf() <= end)
+    } while (cursor.valueOf() <= end);
   }
 
   return count;
@@ -23,8 +23,6 @@ var countOfDays = (function () {
 var countPerDay = Math.ceil(count / countOfDays);
 
 var indexInterval = argv.indexInterval;
-var indexPrefix = argv.indexPrefix;
-
 var dayMoment = argv.start.clone();
 var day;
 
@@ -78,7 +76,7 @@ module.exports = function RandomEvent(indexPrefix) {
       break;
 
     default:
-      event.index = indexPrefix + Math.floor(i / indexInterval)
+      event.index = indexPrefix + Math.floor(i / indexInterval);
       break;
   }
 
