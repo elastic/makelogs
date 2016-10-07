@@ -2,30 +2,30 @@
  * @class RandomList
  */
 
-var _ = require('lodash');
+const _ = require('lodash')
 
-module.exports = RandomSample;
+module.exports = class RandomSample {
+  constructor(min, max, list) {
+    min = Math.max(min, 0)
+    max = Math.min(max, _.size(list))
 
-function RandomSample(min, max, list) {
-  min = Math.max(min, 0);
-  max = Math.min(max, _.size(list));
+    this.get = () => {
+      const n = _.random(min, max)
+      let i = 0
+      const sample = []
 
-  this.get = function () {
-    var n = _.random(min, max);
-    var i = 0;
-    var sample = [];
+      makeSample:
+        while (i < n) {
+          const s = _.sample(list)
+          for (let c = 0; c < i; c += 1) {
+            if (sample[c] === s) continue makeSample
+          }
 
-    makeSample:
-    while (i < n) {
-      var s = _.sample(list);
-      for (var c = 0; c < i; c++) {
-        if (sample[c] === s) continue makeSample;
-      }
+          sample[i] = s
+          i += 1
+        }
 
-      sample[i] = s;
-      i++;
+      return sample
     }
-
-    return sample;
-  };
+  }
 }

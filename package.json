@@ -4,8 +4,8 @@
   "description": "Simple log generator for testing kibana",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "jshint": "jshint _* index.js samples bin"
+    "eslint": "eslint",
+    "lint": "npm run eslint -- . --fix"
   },
   "bin": {
     "makelogs": "./bin/makelogs"
@@ -41,5 +41,14 @@
     "update-notifier": "^0.5.0"
   },
   "devDependencies": {
+    "@spalger/eslint-config-personal": "^0.6.2",
+    "eslint": "^3.7.1",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-import-resolver-webpack": "^0.6.0",
+    "eslint-plugin-babel": "^3.3.0",
+    "eslint-plugin-import": "^1.16.0",
+    "eslint-plugin-jsx-a11y": "^2.2.2",
+    "eslint-plugin-react": "^6.3.0",
+    "webpack": "^2.1.0-beta.25"
   }
 }

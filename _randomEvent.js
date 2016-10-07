@@ -1,40 +1,37 @@
-var samples = require('./samples');
-var argv = require('./argv');
+const samples = require('./samples')
+const argv = require('./argv')
 
-var eventCounter = -1;
-var count = argv.total;
-
-
-
-var countOfDays = (function () {
-  var cursor = argv.start.clone();
-  var count = 0;
-  var end = argv.end.valueOf();
+let eventCounter = -1
+const count = argv.total
+const countPerDay = (() => {
+  const cursor = argv.start.clone()
+  let countOfDays = 0
+  const end = argv.end.valueOf()
 
   if (cursor.valueOf() <= end) {
     do {
-      cursor.add(1, 'day');
-      count += 1;
-    } while (cursor.valueOf() <= end);
+      cursor.add(1, 'day')
+      countOfDays += 1
+    } while (cursor.valueOf() <= end)
   }
 
-  return count;
-}());
-var countPerDay = Math.ceil(count / countOfDays);
+  return Math.ceil(count / countOfDays)
+})()
 
-var indexInterval = argv.indexInterval;
-var dayMoment = argv.start.clone();
-var day;
+const indexInterval = argv.indexInterval
+const dayMoment = argv.start.clone()
+let day
 
 module.exports = function RandomEvent(indexPrefix) {
-  var event = {};
+  const event = {}
 
-  var i = ++eventCounter;
-  var iInDay = i % countPerDay;
+  eventCounter += 1
+  const i = eventCounter
+  const iInDay = i % countPerDay
 
   if (day && iInDay === 0) {
-    dayMoment.add(1, 'day');
-    day = null;
+    dayMoment.add(1, 'day')
+    day = null
   }
 
   if (day == null) {
@@ -42,108 +39,108 @@ module.exports = function RandomEvent(indexPrefix) {
       year: dayMoment.year(),
       month: dayMoment.month(),
       date: dayMoment.date(),
-    };
+    }
   }
 
-  var ms = samples.lessRandomMsInDay();
+  let ms = samples.lessRandomMsInDay()
 
   // extract number of hours from the milliseconds
-  var hours = Math.floor(ms / 3600000);
-  ms = ms - hours * 3600000;
+  const hours = Math.floor(ms / 3600000)
+  ms -= hours * 3600000
 
   // extract number of minutes from the milliseconds
-  var minutes = Math.floor(ms / 60000);
-  ms = ms - minutes * 60000;
+  const minutes = Math.floor(ms / 60000)
+  ms -= minutes * 60000
 
   // extract number of seconds from the milliseconds
-  var seconds = Math.floor(ms / 1000);
-  ms = ms - seconds * 1000;
+  const seconds = Math.floor(ms / 1000)
+  ms -= seconds * 1000
 
   // apply the values found to the date
-  var date = new Date(day.year, day.month, day.date, hours, minutes, seconds, ms);
-  var dateAsIso = date.toISOString();
+  const date = new Date(day.year, day.month, day.date, hours, minutes, seconds, ms)
+  const dateAsIso = date.toISOString()
 
   switch (indexInterval) {
     case 'yearly':
-      event.index = indexPrefix + dateAsIso.substr(0, 4);
-      break;
+      event.index = indexPrefix + dateAsIso.substr(0, 4)
+      break
 
     case 'monthly':
-      event.index = indexPrefix + dateAsIso.substr(0, 4) + '.' + dateAsIso.substr(5, 2);
-      break;
+      event.index = `${indexPrefix + dateAsIso.substr(0, 4)}.${dateAsIso.substr(5, 2)}`
+      break
     case 'daily':
-      event.index = indexPrefix + dateAsIso.substr(0, 4) + '.' + dateAsIso.substr(5, 2) + dateAsIso.substr(8, 2);
-      break;
+      event.index = `${indexPrefix + dateAsIso.substr(0, 4)}.${dateAsIso.substr(5, 2)}${dateAsIso.substr(8, 2)}`
+      break
 
     default:
-      event.index = indexPrefix + Math.floor(i / indexInterval);
-      break;
+      event.index = indexPrefix + Math.floor(i / indexInterval)
+      break
   }
 
-  event['@timestamp'] = dateAsIso;
-  event.ip = samples.ips();
-  event.extension = samples.extensions();
-  event.response = samples.responseCodes();
+  event['@timestamp'] = dateAsIso
+  event.ip = samples.ips()
+  event.extension = samples.extensions()
+  event.response = samples.responseCodes()
 
   event.geo = {
     coordinates: samples.airports(),
     src: samples.countries(),
-    dest: samples.countries()
-  };
-  event.geo.srcdest = event.geo.src + ':' + event.geo.dest;
+    dest: samples.countries(),
+  }
+  event.geo.srcdest = `${event.geo.src}:${event.geo.dest}`
 
   event['@tags'] = [
     samples.tags(),
-    samples.tags2()
-  ];
-  event.utc_time = dateAsIso;
-  event.referer = 'http://' + samples.referrers() + '/' + samples.tags() + '/' + samples.astronauts();
-  event.agent = samples.userAgents();
-  event.clientip = event.ip;
-  event.bytes = event.response < 500 ? samples.lessRandomRespSize(event.extension) : 0;
+    samples.tags2(),
+  ]
+  event.utc_time = dateAsIso
+  event.referer = `http://${samples.referrers()}/${samples.tags()}/${samples.astronauts()}`
+  event.agent = samples.userAgents()
+  event.clientip = event.ip
+  event.bytes = event.response < 500 ? samples.lessRandomRespSize(event.extension) : 0
 
   switch (event.extension) {
-  case 'php':
-    event.host = 'theacademyofperformingartsandscience.org';
-    event.request = '/people/type:astronauts/name:' + samples.astronauts() + '/profile';
-    event.phpmemory = event.memory = event.bytes * 40;
-    break;
-  case 'gif':
-    event.host = 'motion-media.theacademyofperformingartsandscience.org';
-    event.request = '/canhaz/' + samples.astronauts() + '.' + event.extension;
-    break;
-  case 'css':
-    event.host = 'cdn.theacademyofperformingartsandscience.org';
-    event.request = '/styles/' + samples.stylesheets();
-    break;
-  default:
-    event.host = 'media-for-the-masses.theacademyofperformingartsandscience.org';
-    event.request = '/uploads/' + samples.astronauts() + '.' + event.extension;
-    break;
+    case 'php':
+      event.host = 'theacademyofperformingartsandscience.org'
+      event.request = `/people/type:astronauts/name:${samples.astronauts()}/profile`
+      event.phpmemory = event.memory = event.bytes * 40
+      break
+    case 'gif':
+      event.host = 'motion-media.theacademyofperformingartsandscience.org'
+      event.request = `/canhaz/${samples.astronauts()}.${event.extension}`
+      break
+    case 'css':
+      event.host = 'cdn.theacademyofperformingartsandscience.org'
+      event.request = `/styles/${samples.stylesheets()}`
+      break
+    default:
+      event.host = 'media-for-the-masses.theacademyofperformingartsandscience.org'
+      event.request = `/uploads/${samples.astronauts()}.${event.extension}`
+      break
   }
 
-  event.url = 'https://' + event.host + event.request;
+  event.url = `https://${event.host}${event.request}`
 
-  event['@message'] = event.ip + ' - - [' + dateAsIso + '] "GET ' + event.request + ' HTTP/1.1" ' +
-      event.response + ' ' + event.bytes + ' "-" "' + event.agent + '"';
-  event.spaces = 'this   is   a   thing    with lots of     spaces       wwwwoooooo';
-  event.xss = '<script>console.log("xss")</script>';
+  event['@message'] = `${event.ip} - - [${dateAsIso}] "GET ${event.request} HTTP/1.1" ${
+      event.response} ${event.bytes} "-" "${event.agent}"`
+  event.spaces = 'this   is   a   thing    with lots of     spaces       wwwwoooooo'
+  event.xss = '<script>console.log("xss")</script>'
   event.headings = [
-    '<h3>' + samples.astronauts() + '</h5>',
-    'http://' + samples.referrers() + '/' + samples.tags() + '/' + samples.astronauts()
-  ];
+    `<h3>${samples.astronauts()}</h5>`,
+    `http://${samples.referrers()}/${samples.tags()}/${samples.astronauts()}`,
+  ]
   event.links = [
-    samples.astronauts() + '@' + samples.referrers(),
-    'http://' + samples.referrers() + '/' + samples.tags2() + '/' + samples.astronauts(),
-    'www.' + samples.referrers()
-  ];
+    `${samples.astronauts()}@${samples.referrers()}`,
+    `http://${samples.referrers()}/${samples.tags2()}/${samples.astronauts()}`,
+    `www.${samples.referrers()}`,
+  ]
 
-  event.relatedContent = samples.relatedContent();
+  event.relatedContent = samples.relatedContent()
 
   event.machine = {
     os: samples.randomOs(),
-    ram: samples.randomRam()
-  };
+    ram: samples.randomRam(),
+  }
 
-  return event;
-};
+  return event
+}

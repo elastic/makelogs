@@ -2,10 +2,10 @@
  * @class RandomList
  */
 
-module.exports = RandomList;
-
-function RandomList(list) {
-  this.get = function () {
-    return list[Math.round(Math.random() * list.length)];
-  };
+module.export = class RandomList {
+  constructor(list) {
+    this.get = () => (
+      list[Math.round(Math.random() * list.length)]
+    )
+  }
 }

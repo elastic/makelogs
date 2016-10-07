@@ -1,60 +1,61 @@
-var argv = require('./argv');
-var _ = require('lodash');
-var Promise = require('bluebird');
-var through2 = require('through2');
-var parse = require('url').parse;
-var elasticsearch = require('elasticsearch');
-var Client = elasticsearch.Client;
-var NoConnections = elasticsearch.errors.NoConnections;
-var RequestTimeout = elasticsearch.errors.RequestTimeout;
+const argv = require('./argv')
+const _ = require('lodash')
+const Promise = require('bluebird')
+const through2 = require('through2')
+const elasticsearch = require('elasticsearch')
+const { parse } = require('url')
 
-var host = String(argv.host);
-var proto = _.contains(host, '//') ? '' : '//';
-var parsed = parse(proto + host, false, true);
+const Client = elasticsearch.Client
+const NoConnections = elasticsearch.errors.NoConnections
+const RequestTimeout = elasticsearch.errors.RequestTimeout
 
-var makeUseable;
-var usable = new Promise(function (resolve) {
-  makeUseable = resolve;
-});
+const host = String(argv.host)
+const proto = _.contains(host, '//') ? '' : '//'
+const parsed = parse(proto + host, false, true)
 
-var ms = 5000;
-var client = module.exports = new Client({
+let makeUseable
+const usable = new Promise(resolve => {
+  makeUseable = resolve
+})
+
+const ms = 5000
+const client = module.exports = new Client({
   log: {
     type: 'stream',
     level: argv.trace ? 'trace' : 'warning',
-    stream: through2(function (chunk, enc, cb) {
-      usable.then(function () {
-        process.stdout.write(chunk, enc);
-        cb();
-      });
-    })
+    stream: through2((chunk, enc, cb) => {
+      usable.then(() => {
+        process.stdout.write(chunk, enc)
+        cb()
+      })
+    }),
   },
   host: {
     host: parsed.hostname,
     port: parsed.port,
-    auth: argv.auth
-  }
-});
+    auth: argv.auth,
+  },
+})
 
-client.usable = usable;
+client.usable = usable
 
 client.ping({
-  requestTimeout: ms
+  requestTimeout: ms,
 })
-.then(function () {
-  makeUseable();
+.then(() => {
+  makeUseable()
 })
-.catch(function (err) {
-  var notAlive = err instanceof NoConnections;
-  var timeout = err instanceof RequestTimeout;
+.catch(err => {
+  const notAlive = err instanceof NoConnections
+  const timeout = err instanceof RequestTimeout
 
   if (notAlive || timeout) {
-    console.error('Unable to connect to elasticsearch at %s within %d seconds', host, ms / 1000);
+    console.error('Unable to connect to elasticsearch at %s within %d seconds', host, ms / 1000)
   } else {
-    console.log('unknown ping error', err);
+    console.log('unknown ping error', err)
   }
 
-  client.close();
+  client.close()
   // prevent the promise from ever resolving or rejecting
-  return new Promise(_.noop);
-});
+  return new Promise(_.noop)
+})

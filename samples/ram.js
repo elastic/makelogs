@@ -1,4 +1,4 @@
-var gb = 1024 * 1024 * 1024;
+const gb = 1024 * 1024 * 1024
 
 module.exports = [
   2 * gb,
@@ -21,4 +21,4 @@ module.exports = [
   19 * gb,
   20 * gb,
   30 * gb,
-];
+]

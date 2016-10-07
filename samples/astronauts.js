@@ -555,5 +555,5 @@ module.exports = [
   'Zhai Zhigang',
   'Zhang Xiaoguang',
   'Vitaliy Zholobov',
-  'Vyacheslav Zudov'
-];
+  'Vyacheslav Zudov',
+]

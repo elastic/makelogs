@@ -3,5 +3,5 @@ module.exports = [
   'ios',
   'win xp',
   'win 7',
-  'win 8'
-];
+  'win 8',
+]

@@ -1,15 +1,15 @@
-var Promise = require('bluebird');
+const Promise = require('bluebird')
 
-var argv = require('./argv');
-var client = require('./_client');
-var omitFields = require('./_omitFields');
-var confirmReset = require('./_confirmReset');
+const argv = require('./argv')
+const client = require('./_client')
+const omitFields = require('./_omitFields')
+const confirmReset = require('./_confirmReset')
 
 module.exports = function createIndex() {
-  var indexTemplate = argv.indexPrefix + '*';
-  var indexTemplateName = 'makelogs_index_template__' + argv.indexPrefix;
+  const indexTemplate = `${argv.indexPrefix}*`
+  const indexTemplateName = `makelogs_index_template__${argv.indexPrefix}`
 
-  var body = {
+  const body = {
     template: indexTemplate,
     settings: {
       index: {
@@ -21,10 +21,10 @@ module.exports = function createIndex() {
           makelogs_url: {
             type: 'standard',
             tokenizer: 'uax_url_email',
-            max_token_length: 1000
-          }
-        }
-      }
+            max_token_length: 1000,
+          },
+        },
+      },
     },
     mappings: {
       _default_: {
@@ -45,54 +45,54 @@ module.exports = function createIndex() {
                     index: 'not_analyzed',
                     type: 'string',
                     doc_values: true,
-                  }
-                }
-              }
-            }
-          }
+                  },
+                },
+              },
+            },
+          },
         ],
 
         // properties
         properties: omitFields({
           '@timestamp': {
-            type: 'date'
+            type: 'date',
           },
           id: {
             type: 'integer',
             index: 'true',
-            include_in_all: false
+            include_in_all: false,
           },
           clientip: {
-            type: 'ip'
+            type: 'ip',
           },
           ip: {
-            type: 'ip'
+            type: 'ip',
           },
           memory: {
-            type: 'double'
+            type: 'double',
           },
           referer: {
             type: 'string',
-            index: 'not_analyzed'
+            index: 'not_analyzed',
           },
           geo: {
             properties: {
               srcdest: {
                 type: 'string',
-                index: 'not_analyzed'
+                index: 'not_analyzed',
               },
               dest: {
                 type: 'string',
-                index: 'not_analyzed'
+                index: 'not_analyzed',
               },
               src: {
                 type: 'string',
-                index: 'not_analyzed'
+                index: 'not_analyzed',
               },
               coordinates: {
-                type: 'geo_point'
-              }
-            }
+                type: 'geo_point',
+              },
+            },
           },
           meta: {
             properties: {
@@ -101,7 +101,7 @@ module.exports = function createIndex() {
               },
               char: {
                 type: 'string',
-                index: 'not_analyzed'
+                index: 'not_analyzed',
               },
               user: {
                 properties: {
@@ -110,69 +110,67 @@ module.exports = function createIndex() {
                   },
                   lastname: {
                     type: 'integer',
-                    index: 'true'
-                  }
-                }
-              }
-            }
-          }
-        }, true)
-      }
-    }
-  };
+                    index: 'true',
+                  },
+                },
+              },
+            },
+          },
+        }, true),
+      },
+    },
+  }
 
   return client.usable
-  .then(function () {
-    return Promise.props({
-      template: client.indices.existsTemplate({
-        name: indexTemplateName
-      }),
-      indices: client.indices.exists({
-        index: indexTemplate
-      })
-    });
-  })
-  .then(function (exists) {
+  .then(() => Promise.props({
+    template: client.indices.existsTemplate({
+      name: indexTemplateName,
+    }),
+    indices: client.indices.exists({
+      index: indexTemplate,
+    }),
+  }))
+  .then(exists => {
     function clearExisting() {
-      console.log('clearing existing "%s" index templates and indices', indexTemplate);
+      console.log('clearing existing "%s" index templates and indices', indexTemplate)
       return Promise.all([
         client.indices.deleteTemplate({
           ignore: 404,
-          name: indexTemplateName
+          name: indexTemplateName,
         }),
         client.indices.delete({
           ignore: 404,
-          index: indexTemplate
-        })
-      ]);
+          index: indexTemplate,
+        }),
+      ])
     }
 
     function create() {
-      console.log('creating index template for "%s"', indexTemplate);
+      console.log('creating index template for "%s"', indexTemplate)
       return client.indices.putTemplate({
         name: indexTemplateName,
-        body: body
-      });
+        body,
+      })
     }
 
     function maybeReset(reset) {
       switch (reset) {
-      case true:
-        return clearExisting().then(create);
-      case false:
-        if (!exists.indices) {
-          return create();
-        }
-        return; // do nothing, index template exists
-      default:
-        return confirmReset().then(maybeReset);
+        case true:
+          return clearExisting().then(create)
+        case false:
+          if (!exists.indices) {
+            return create()
+          }
+          return undefined// do nothing, index template exists
+        default:
+          return confirmReset().then(maybeReset)
       }
     }
 
     if (exists.template || exists.indices) {
-      return maybeReset(argv.reset);
-    } else {
-      return create();
+      return maybeReset(argv.reset)
     }
-  });
-};
+
+    return create()
+  })
+}
