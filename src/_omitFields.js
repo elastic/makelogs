@@ -3,55 +3,54 @@ const argv = require('./argv')
 
 const parseStringPropertyPath = require('./_parseStringPropertyPath')
 
-if (!argv.omit) {
-  module.exports = _.identity
-  return
-}
+module.exports = !argv.omit
+? _.identity
+: (() => {
+  const rawPaths = (
+    _.isArray(argv.omit)
+    ? argv.omit
+    : [ argv.omit ]
+  )
+  const paths = rawPaths.map(parseStringPropertyPath)
 
-const rawPaths = (
-  _.isArray(argv.omit)
-  ? argv.omit
-  : [ argv.omit ]
-)
-const paths = rawPaths.map(parseStringPropertyPath)
+  return (body, isFieldMap) => {
+    let walkIn
+    const unDefine = (obj, path) => {
+      if (!obj) return
 
-module.exports = (body, isFieldMap) => {
-  let walkIn
-  const unDefine = (obj, path) => {
-    if (!obj) return
+      const step = path.shift()
+      let next = obj[step]
 
-    const step = path.shift()
-    let next = obj[step]
-
-    if (path.length === 0) {
-      // end of the line
-      obj[step] = next = undefined
-    } else if (next && step === '[]') {
-      walkIn(next, path)
-    } else if (next) {
-      // FIXME Make this prettier
-      if (isFieldMap) {
-        unDefine(next.properties, path)
-      } else {
-        unDefine(next, path)
+      if (path.length === 0) {
+        // end of the line
+        obj[step] = next = undefined
+      } else if (next && step === '[]') {
+        walkIn(next, path)
+      } else if (next) {
+        // FIXME Make this prettier
+        if (isFieldMap) {
+          unDefine(next.properties, path)
+        } else {
+          unDefine(next, path)
+        }
       }
+
+      path.unshift(step)
     }
 
-    path.unshift(step)
-  }
+    walkIn = (arr, path) => {
+      if (!_.isArray(arr)) return
 
-  walkIn = (arr, path) => {
-    if (!_.isArray(arr)) return
+      arr.forEach(obj => {
+        unDefine(obj, path)
+      })
+    }
 
-    arr.forEach(obj => {
-      unDefine(obj, path)
+    isFieldMap = !!isFieldMap
+    paths.forEach(path => {
+      unDefine(body, path)
     })
+
+    return body
   }
-
-  isFieldMap = !!isFieldMap
-  paths.forEach(path => {
-    unDefine(body, path)
-  })
-
-  return body
-}
+})()

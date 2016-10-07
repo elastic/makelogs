@@ -1,0 +1,6 @@
+src
+.babelrc
+.eslintrc.yaml
+.nvmrc
+README.md
+dest/*.map

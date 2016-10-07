@@ -16,7 +16,7 @@ module.exports = class WeightedList extends Array {
    * @param {Number} [weight] Optional.  Defaults to 1.
    * @return {Number} The index of the item that was added.
    */
-  push = (weight = 1, value) => {
+  push(weight = 1, value) {
     Array.prototype.push.call(this, {
       value,
       weight,
