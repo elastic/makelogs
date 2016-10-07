@@ -41,6 +41,5 @@
     "update-notifier": "^0.5.0"
   },
   "devDependencies": {
-    "jshint": "^2.9.2"
   }
 }
