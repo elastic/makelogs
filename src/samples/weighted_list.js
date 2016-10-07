@@ -3,10 +3,13 @@
  * @constructor
  */
 
-module.exports = class WeightedList extends Array {
-  constructor(list) {
-    super()
-    list.forEach(i => this.push(i))
+module.exports = class WeightedList {
+  constructor(valuesToWeights = {}) {
+    this._list = []
+
+    Object.keys(valuesToWeights).forEach(value => {
+      this.push(valuesToWeights[value], value)
+    })
   }
 
   /**
@@ -17,7 +20,7 @@ module.exports = class WeightedList extends Array {
    * @return {Number} The index of the item that was added.
    */
   push(weight = 1, value) {
-    Array.prototype.push.call(this, {
+    this._list.push({
       value,
       weight,
     })
@@ -29,7 +32,7 @@ module.exports = class WeightedList extends Array {
   }
 
   get() {
-    return this[this._randomIndex()].value
+    return this._list[this._randomIndex()].value
   }
 
   /**
@@ -98,7 +101,7 @@ module.exports = class WeightedList extends Array {
     let sum = 0
     const totals = []
 
-    this.forEach(item => {
+    this._list.forEach(item => {
       sum += item.weight
       totals.push(sum)
     })

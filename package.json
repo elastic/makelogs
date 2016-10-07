@@ -12,7 +12,7 @@
     "prepublish": "npm run test; npm run build"
   },
   "bin": {
-    "makelogs": "./bin/makelogs"
+    "makelogs": "./dest/bin/makelogs"
   },
   "repository": {
     "type": "git",
@@ -34,7 +34,8 @@
   "homepage": "https://github.com/spenceralger/makelogs",
   "dependencies": {
     "async": "^1.4.2",
-    "bluebird": "^2.10.0",
+    "babel-polyfill": "^6.16.0",
+    "bluebird": "^3.4.6",
     "elasticsearch": "^8.1.0",
     "inquirer": "^0.11.1",
     "lodash": "~2.4.1",

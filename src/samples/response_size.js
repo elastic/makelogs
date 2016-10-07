@@ -28,8 +28,8 @@ const ext = {
 
 module.exports = extension => {
   if (ext[extension]) {
-    return ext[extension].get()
+    return ext[extension]()
   }
 
-  return ext.default.get()
+  return ext.default()
 }

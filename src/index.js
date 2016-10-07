@@ -1,34 +1,39 @@
-/**
- * Notify user of updates
- */
-const pkg = require('./package.json')
-require('update-notifier')({ packageName: pkg.name, packageVersion: pkg.version }).notify()
+import Bluebird from 'bluebird'
 
-const Promise = require('bluebird')
-const client = require('./_client')
-const randomEvent = require('./_randomEvent')
-const samples = require('./samples')
-const eventBuffer = require('./eventBuffer')
-const createIndex = require('./_createIndex')
-const argv = require('./argv')
+import { initializeClient } from './client'
+import randomEvent from './_randomEvent'
+import samples from './samples'
+import eventBuffer from './eventBuffer'
+import createIndex from './_createIndex'
+import argv from './argv'
 
 const total = argv.total
 const startingMoment = argv.start
 const endingMoment = argv.end
 const indexPrefix = argv.indexPrefix
 
-client.usable
-.then(() => {
-  console.log('Generating', total, 'events from', startingMoment.format(), 'to', endingMoment.format())
-})
-.then(() => {
-  if (argv.dry) return undefined
-  return createIndex()
-})
-.then(() => {
+export async function runCli() {
+  const success = await initializeClient({
+    host: argv.hostname,
+    port: argv.port,
+    auth: argv.auth,
+  })
+
+  if (!success) return
+
+  console.log(
+    'Generating', total, 'events from',
+    startingMoment.format(), 'to', endingMoment.format()
+  )
+
+  if (!argv.dry) {
+    await createIndex()
+  }
+
   argv.log('creating', total, 'events')
   let i = total
-  return (function crunch() {
+
+  await (function crunch() {
     argv.log('creating no more than', i, 'events')
 
     for (; i >= 0; i -= 1) {
@@ -48,17 +53,14 @@ client.usable
       if (delay) {
         argv.log('waiting for bulk to complete')
         // stop the loop and restart once complete
-        return Promise.resolve(delay).then(crunch)
+        return Bluebird.resolve(delay).then(crunch)
       }
     }
 
     return undefined
   }())
-})
-.then(() => {
-  if (argv.dry) return
-  eventBuffer.push(false)
-})
-.catch(err => {
-  console.error(err.stack)
-})
+
+  if (!argv.dry) {
+    eventBuffer.push(false)
+  }
+}

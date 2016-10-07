@@ -1,9 +1,10 @@
+import { client } from '../client'
+
 const async = require('async')
-const Promise = require('bluebird')
+const { attempt } = require('bluebird')
 const _ = require('lodash')
 
 const argv = require('../argv')
-const client = require('../_client')
 
 let first = true
 
@@ -21,8 +22,7 @@ module.exports = eventBuffer => {
       body.push({ index: event.header }, event.body)
     })
 
-    Promise.resolve(client.usable)
-    .then(() => {
+    attempt(() => {
       if (body.length) {
         argv.log('sending', body.length / 2, 'bulk requests')
         return client.bulk({ body })

@@ -1,6 +1,6 @@
 const eventBuffer = []
 const argv = require('../argv')
-const Promise = require('bluebird')
+const Bluebird = require('bluebird')
 const omitFields = require('../_omitFields')
 const bulkQueue = require('./_bulkQueue')(eventBuffer)
 
@@ -26,11 +26,11 @@ let pending
 eventBuffer.flush = () => {
   if (pending) return pending
 
-  pending = Promise.delay(1)
+  pending = Bluebird.delay(1)
   .then(() => {
     pending = null
 
-    return new Promise(resolve => {
+    return new Bluebird(resolve => {
       argv.log('pushing', eventBuffer.length, 'events into the bulkQueue')
       bulkQueue.push([ eventBuffer.splice(0) ], err => {
         if (err) {

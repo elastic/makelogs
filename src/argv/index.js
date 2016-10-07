@@ -23,8 +23,18 @@ const optimist = require('optimist')
     },
     host: {
       alias: 'h',
-      describe: 'The host name and port',
-      default: 'localhost:9200',
+      describe: 'DEPRECATED',
+    },
+    hostname: {
+      alias: 'H',
+      describe: 'The elasticsearch hostname',
+      default: 'localhost',
+    },
+    port: {
+      alias: 'p',
+      type: 'number',
+      describe: 'The elasticsearch port',
+      default: 9200,
     },
     auth: {
       describe: 'user:password when you want to connect to a secured elasticsearch cluster over basic auth',
@@ -87,6 +97,15 @@ if (argv.help) {
   console.log(read(OMIT_HELP_PATH, 'utf8'))
 
   process.exit()
+}
+
+if (argv.host) {
+  console.log('[DEPRECATED]: --host and -h flags are deprecated, use --hostname and --port instead')
+
+  ;[
+    argv.hostname = argv.hostname,
+    argv.port = argv.port,
+  ] = argv.host.split(':')
 }
 
 switch (argv.indexInterval) {

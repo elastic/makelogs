@@ -1,7 +1,12 @@
-const Promise = require('bluebird')
+import {
+  attempt,
+  props as asyncProps,
+  all as asyncAll,
+} from 'bluebird'
+
+import { client } from './client'
 
 const argv = require('./argv')
-const client = require('./_client')
 const omitFields = require('./_omitFields')
 const confirmReset = require('./_confirmReset')
 
@@ -121,8 +126,7 @@ module.exports = function createIndex() {
     },
   }
 
-  return client.usable
-  .then(() => Promise.props({
+  return attempt(() => asyncProps({
     template: client.indices.existsTemplate({
       name: indexTemplateName,
     }),
@@ -133,7 +137,7 @@ module.exports = function createIndex() {
   .then(exists => {
     function clearExisting() {
       console.log('clearing existing "%s" index templates and indices', indexTemplate)
-      return Promise.all([
+      return asyncAll([
         client.indices.deleteTemplate({
           ignore: 404,
           name: indexTemplateName,

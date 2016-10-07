@@ -1,9 +1,9 @@
 const inquirer = require('inquirer')
-const Promise = require('bluebird')
+const Bluebird = require('bluebird')
 
 const argv = require('./argv')
 
-module.exports = () => new Promise(resolve => {
+module.exports = () => new Bluebird(resolve => {
   if (argv.reset != null) {
     resolve()
     return
