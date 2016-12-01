@@ -8,9 +8,18 @@ var Client = elasticsearch.Client;
 var NoConnections = elasticsearch.errors.NoConnections;
 var RequestTimeout = elasticsearch.errors.RequestTimeout;
 
-var host = String(argv.host);
-var proto = _.contains(host, '//') ? '' : '//';
-var parsed = parse(proto + host, false, true);
+var url = argv.url;
+if (!url) {
+  var host = String(argv.host);
+  var proto = _.contains(host, '//') ? '' : '//';
+  var parsed = parse(proto + host, false, true);
+  
+  url = formatUrl({
+    host: parsed.hostname,
+    port: parsed.port,
+    auth: argv.auth
+  })
+}
 
 var makeUseable;
 var usable = new Promise(function (resolve) {
@@ -29,11 +38,7 @@ var client = module.exports = new Client({
       });
     })
   },
-  host: {
-    host: parsed.hostname,
-    port: parsed.port,
-    auth: argv.auth
-  }
+  host: url
 });
 
 client.usable = usable;
