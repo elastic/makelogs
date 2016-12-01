@@ -1,3 +1,4 @@
+var formatUrl = require('url').format;
 var argv = require('./argv');
 var _ = require('lodash');
 var Promise = require('bluebird');
@@ -13,12 +14,12 @@ if (!url) {
   var host = String(argv.host);
   var proto = _.contains(host, '//') ? '' : '//';
   var parsed = parse(proto + host, false, true);
-  
+
   url = formatUrl({
-    host: parsed.hostname,
+    hostname: parsed.hostname,
     port: parsed.port,
     auth: argv.auth
-  })
+  });
 }
 
 var makeUseable;
