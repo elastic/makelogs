@@ -21,6 +21,9 @@ var optimist = require('optimist')
         ', e.g. "1/10" to go back one day, and forward 10',
       default: 1
     },
+    url: {
+      describe: 'Elasticsearch url, overrides host and auth, can include any url part.'
+    },
     host: {
       alias: 'h',
       describe: 'The host name and port',
