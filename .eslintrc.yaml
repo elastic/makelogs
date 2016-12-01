@@ -1,9 +1,0 @@
----
-extends: "@spalger/eslint-config-personal/es6"
-rules:
-  no-param-reassign: off
-  global-require: off
-  no-restricted-syntax: off
-  no-labels: off
-  no-continue: off
-  no-console: off

@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/samples/round_all_gets.js"],"names":["module","exports","Math","round","stoch","get"],"mappings":";;AAAAA,OAAOC,OAAP,GAAiB;AAAA,SACf;AAAA,WACEC,KAAKC,KAAL,CAAWC,MAAMC,GAAN,wBAAX,CADF;AAAA,GADe;AAAA,CAAjB","file":"round_all_gets.js","sourcesContent":["module.exports = stoch =>\n  (...args) =>\n    Math.round(stoch.get(...args))\n"]}

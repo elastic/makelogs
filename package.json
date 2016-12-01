@@ -2,17 +2,13 @@
   "name": "makelogs",
   "version": "3.0.2",
   "description": "Simple log generator for testing kibana",
+  "main": "index.js",
   "scripts": {
-    "test": "npm run lint",
-    "eslint": "eslint",
-    "babel": "babel",
-    "lint": "npm run eslint -- src --fix",
-    "build": "rm -rf dest; npm run babel -- src -d dest -D -s true",
-    "dev": "npm run build -- --watch",
-    "prepublish": "npm run test; npm run build"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "jshint": "jshint _* index.js samples bin"
   },
   "bin": {
-    "makelogs": "./dest/bin/makelogs"
+    "makelogs": "./bin/makelogs"
   },
   "repository": {
     "type": "git",
@@ -34,8 +30,7 @@
   "homepage": "https://github.com/spenceralger/makelogs",
   "dependencies": {
     "async": "^1.4.2",
-    "babel-polyfill": "^6.16.0",
-    "bluebird": "^3.4.6",
+    "bluebird": "^2.10.0",
     "elasticsearch": "^8.1.0",
     "inquirer": "^0.11.1",
     "lodash": "~2.4.1",
@@ -46,18 +41,6 @@
     "update-notifier": "^0.5.0"
   },
   "devDependencies": {
-    "@spalger/babel-presets": "^0.3.2",
-    "@spalger/eslint-config-personal": "^0.6.2",
-    "babel": "^6.5.2",
-    "babel-cli": "^6.16.0",
-    "babel-eslint": "^7.0.0",
-    "eslint": "^3.7.1",
-    "eslint-config-airbnb": "^12.0.0",
-    "eslint-import-resolver-webpack": "^0.6.0",
-    "eslint-plugin-babel": "^3.3.0",
-    "eslint-plugin-import": "^1.16.0",
-    "eslint-plugin-jsx-a11y": "^2.2.2",
-    "eslint-plugin-react": "^6.3.0",
-    "webpack": "^2.1.0-beta.25"
+    "jshint": "^2.9.2"
   }
 }
