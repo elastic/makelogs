@@ -72,7 +72,7 @@ module.exports = function RandomEvent(indexPrefix) {
       event.index = indexPrefix + dateAsIso.substr(0, 4) + '.' + dateAsIso.substr(5, 2);
       break;
     case 'daily':
-      event.index = indexPrefix + dateAsIso.substr(0, 4) + '.' + dateAsIso.substr(5, 2) + dateAsIso.substr(8, 2);
+      event.index = indexPrefix + dateAsIso.substr(0, 4) + '.' + dateAsIso.substr(5, 2) + '.' + dateAsIso.substr(8, 2);
       break;
 
     default:
