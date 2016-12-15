@@ -31,7 +31,7 @@ module.exports = function createIndex() {
         dynamic_templates: [
           {
             string_fields: {
-              match_mapping_type: 'text',
+              match_mapping_type: 'string',
               match: '*',
 
               mapping: {
