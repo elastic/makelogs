@@ -54,8 +54,7 @@ module.exports = function createIndex() {
           },
           id: {
             type: 'integer',
-            index: 'true',
-            include_in_all: false
+            index: 'true'
           },
           clientip: {
             type: 'ip'
