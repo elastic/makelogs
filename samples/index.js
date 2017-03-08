@@ -25,7 +25,7 @@ sets.astronauts = new RandomList(require('./astronauts').map(function (name) {
   return name.replace(/\W+/g, '-').toLowerCase();
 }));
 
-sets.airports = new RandomList(require('./airports'));
+sets.populated_places = new RandomList(require('./populated_places'));
 
 sets.ips = new IpGenerator(100, 1000);
 
