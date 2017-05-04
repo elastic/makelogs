@@ -1,4 +1,4 @@
-# makelogs 3.0
+# makelogs
 
 Simple generator used to push fake HTTP traffic logs into elasticsearch. It uses the node.js client.
 
