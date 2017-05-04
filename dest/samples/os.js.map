@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../src/samples/os.js"],"names":["module","exports"],"mappings":";;AAAAA,OAAOC,OAAP,GAAiB,CACf,KADe,EAEf,KAFe,EAGf,QAHe,EAIf,OAJe,EAKf,OALe,CAAjB","file":"os.js","sourcesContent":["module.exports = [\n  'osx',\n  'ios',\n  'win xp',\n  'win 7',\n  'win 8',\n]\n"]}
