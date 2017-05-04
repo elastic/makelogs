@@ -11,7 +11,7 @@ Documents look like this:
 ```json
 {
   "_index": "logstash-2014.06.17",
-  "_type": "nginx",
+  "_type": "doc",
   "_id": "706786",
   "_score": 11.412156,
   "_source": {
