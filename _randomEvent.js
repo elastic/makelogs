@@ -4,8 +4,6 @@ var argv = require('./argv');
 var eventCounter = -1;
 var count = argv.total;
 
-
-
 var countOfDays = (function () {
   var cursor = argv.start.clone();
   var count = 0;

@@ -74,11 +74,6 @@ sets.userAgents = new WeightedList({
   'Mozilla/5.0 (X11; Linux x86_64; rv:6.0a1) Gecko/20110421 Firefox/6.0a1': 40
 });
 
-sets.types = new WeightedList({
-  'nginx': 1,
-  'apache': 4
-});
-
 sets.stylesheets = new RandomList([
   'main.css',
   'app.css',
