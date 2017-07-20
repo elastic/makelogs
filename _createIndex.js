@@ -117,7 +117,8 @@ module.exports = function createIndex() {
         name: indexTemplateName
       }),
       indices: client.indices.exists({
-        index: indexTemplate
+        index: indexTemplate,
+        allowNoIndices: false
       })
     });
   })
