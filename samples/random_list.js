@@ -6,6 +6,6 @@ module.exports = RandomList;
 
 function RandomList(list) {
   this.get = function () {
-    return list[Math.round(Math.random() * list.length)];
+    return list[Math.floor(Math.random() * list.length)];
   };
 }
