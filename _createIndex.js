@@ -27,7 +27,7 @@ module.exports = function createIndex() {
       }
     },
     mappings: {
-      _default_: {
+      _doc: {
         dynamic_templates: [
           {
             string_fields: {
