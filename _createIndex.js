@@ -1,5 +1,4 @@
 var Promise = require('bluebird');
-
 var argv = require('./argv');
 var client = require('./_client');
 var omitFields = require('./_omitFields');
@@ -27,7 +26,7 @@ module.exports = function createIndex() {
       }
     },
     mappings: {
-      _doc: {
+      doc: {
         dynamic_templates: [
           {
             string_fields: {
