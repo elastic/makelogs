@@ -27,25 +27,6 @@ module.exports = function createIndex() {
     },
     mappings: {
       doc: {
-        dynamic_templates: [
-          {
-            string_fields: {
-              match_mapping_type: 'string',
-              match: '*',
-
-              mapping: {
-                type: 'text',
-
-                fields: {
-                  raw: {
-                    type: 'keyword',
-                  }
-                }
-              }
-            }
-          }
-        ],
-
         // properties
         properties: omitFields({
           '@timestamp': {
