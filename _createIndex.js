@@ -1,4 +1,5 @@
 var Promise = require('bluebird');
+
 var argv = require('./argv');
 var client = require('./_client');
 var omitFields = require('./_omitFields');
@@ -26,7 +27,26 @@ module.exports = function createIndex() {
       }
     },
     mappings: {
-      doc: {
+      _default_: {
+        dynamic_templates: [
+          {
+            string_fields: {
+              match_mapping_type: 'string',
+              match: '*',
+
+              mapping: {
+                type: 'text',
+
+                fields: {
+                  raw: {
+                    type: 'keyword',
+                  }
+                }
+              }
+            }
+          }
+        ],
+
         // properties
         properties: omitFields({
           '@timestamp': {
