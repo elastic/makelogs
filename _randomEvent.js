@@ -125,7 +125,7 @@ module.exports = function RandomEvent(indexPrefix) {
   event['@message'] = event.ip + ' - - [' + dateAsIso + '] "GET ' + event.request + ' HTTP/1.1" ' +
       event.response + ' ' + event.bytes + ' "-" "' + event.agent + '"';
   event.spaces = 'this   is   a   thing    with lots of     spaces       wwwwoooooo';
-  event.xss = '<script>console.log("xss")</script>';
+  event.xss = '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg==" onload="alert(\'XSS found via img-onload!\')"><script>alert("XSS found via script-tag!")</script>';
   event.headings = [
     '<h3>' + samples.astronauts() + '</h5>',
     'http://' + samples.referrers() + '/' + samples.tags() + '/' + samples.astronauts()
