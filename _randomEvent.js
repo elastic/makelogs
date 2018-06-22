@@ -1,5 +1,6 @@
 var samples = require('./samples');
 var argv = require('./argv');
+var stringGenerator = require('./samples/string_generator');
 
 var eventCounter = -1;
 var count = argv.total;
@@ -142,6 +143,13 @@ module.exports = function RandomEvent(indexPrefix) {
     os: samples.randomOs(),
     ram: samples.randomRam()
   };
+
+  event.longValues = stringGenerator(Math.floor(Math.random() * 200 + 100));
+  event.longValuesWithSpaces = stringGenerator(Math.floor(Math.random() * 200 + 100), true);
+
+  var longFieldName = 'thisisaverylongfieldnamethatevendoesnotcontainanyspaces'
+    + 'whyitcouldpotentiallybreakouruiinseveralplaces';
+  event[longFieldName] = stringGenerator(Math.floor(Math.random() * 200 + 50));
 
   return event;
 };
