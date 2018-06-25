@@ -1,5 +1,6 @@
 var samples = require('./samples');
 var argv = require('./argv');
+var stringGenerator = require('./samples/string_generator');
 
 var eventCounter = -1;
 var count = argv.total;
@@ -125,7 +126,7 @@ module.exports = function RandomEvent(indexPrefix) {
   event['@message'] = event.ip + ' - - [' + dateAsIso + '] "GET ' + event.request + ' HTTP/1.1" ' +
       event.response + ' ' + event.bytes + ' "-" "' + event.agent + '"';
   event.spaces = 'this   is   a   thing    with lots of     spaces       wwwwoooooo';
-  event.xss = '<script>console.log("xss")</script>';
+  event.xss = '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg==" onload="alert(\'XSS found via img-onload!\')"><script>alert("XSS found via script-tag!")</script>';
   event.headings = [
     '<h3>' + samples.astronauts() + '</h5>',
     'http://' + samples.referrers() + '/' + samples.tags() + '/' + samples.astronauts()
@@ -142,6 +143,13 @@ module.exports = function RandomEvent(indexPrefix) {
     os: samples.randomOs(),
     ram: samples.randomRam()
   };
+
+  event.longValues = stringGenerator(Math.floor(Math.random() * 200 + 100));
+  event.longValuesWithSpaces = stringGenerator(Math.floor(Math.random() * 200 + 100), true);
+
+  var longFieldName = 'thisisaverylongfieldnamethatevendoesnotcontainanyspaces'
+    + 'whyitcouldpotentiallybreakouruiinseveralplaces';
+  event[longFieldName] = stringGenerator(Math.floor(Math.random() * 200 + 50));
 
   return event;
 };
