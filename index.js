@@ -41,7 +41,7 @@ client.usable
 
       // eventBuffer.push might return a promise,
       var delay = eventBuffer.push({
-        header: { _index: event.index, _type: 'doc' },
+        header: { _index: event.index, _type: '_doc' },
         body: event
       });
 
