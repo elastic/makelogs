@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var moment = require('moment');
 
-var customDayBoundsRE = /^\d+\/\d+$/;
+var customDayBoundsRE = /^\-?\d+\/\-?\d+$/;
 var oldDayExpressionRE = /[\-\+\,]/;
 
 module.exports = function parseDays(argv) {
