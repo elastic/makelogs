@@ -17,7 +17,7 @@ var optimist = require('optimist')
       alias: 'd',
       type: 'number',
       required: true,
-      describe: 'Mumber of days ± today to generate data for. Use one number or two seperated by a slash' +
+      describe: 'Number of days ± today to generate data for. Use one number or two separated by a slash' +
         ', e.g. "1/10" to go back one day, and forward 10',
       default: 1
     },
@@ -56,7 +56,7 @@ var optimist = require('optimist')
       type: 'boolean'
     },
     reset: {
-      describe: 'Clear all {prefix}-* indices and the makelogs index template before genrating',
+      describe: 'Clear all {prefix}-* indices and the makelogs index template before generating',
       type: 'boolean',
       default: null
     },
@@ -65,7 +65,7 @@ var optimist = require('optimist')
       type: 'boolean'
     },
     trace: {
-      describe: 'Log every request to elastisearch, including request bodies. BE CAREFULL',
+      describe: 'Log every request to elasticsearch, including request bodies. BE CAREFUL!',
       type: 'boolean'
     },
     omit: {
