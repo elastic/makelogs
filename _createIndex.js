@@ -26,7 +26,6 @@ module.exports = function createIndex() {
       }
     },
     mappings: {
-      _doc: {
         // properties
         properties: omitFields({
           '@timestamp': {
@@ -86,7 +85,6 @@ module.exports = function createIndex() {
             }
           }
         }, true)
-      }
     }
   };
 
