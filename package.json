@@ -1,5 +1,5 @@
 {
-  "name": "makelogs",
+  "name": "@elastic/makelogs",
   "version": "4.3.1",
   "description": "Simple log generator for testing kibana",
   "main": "index.js",
@@ -25,9 +25,9 @@
   "author": "Spencer Alger",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/spenceralger/makelogs/issues"
+    "url": "https://github.com/elastic/makelogs/issues"
   },
-  "homepage": "https://github.com/spenceralger/makelogs",
+  "homepage": "https://github.com/elastic/makelogs",
   "dependencies": {
     "async": "^1.4.2",
     "bluebird": "^2.10.0",

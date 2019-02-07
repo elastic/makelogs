@@ -62,7 +62,7 @@ Documents look like this:
 ## to install
 
 ```sh
-npm install -g makelogs
+npm install -g @elastic/makelogs
 ```
 
 then run `makelogs --help` for usage info:
