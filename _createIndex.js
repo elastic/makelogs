@@ -26,67 +26,65 @@ module.exports = function createIndex() {
       }
     },
     mappings: {
-      _doc: {
-        // properties
-        properties: omitFields({
-          '@timestamp': {
-            type: 'date'
-          },
-          id: {
-            type: 'integer',
-            index: 'true',
-          },
-          clientip: {
-            type: 'ip'
-          },
-          ip: {
-            type: 'ip'
-          },
-          memory: {
-            type: 'double'
-          },
-          referer: {
-            type: 'keyword',
-          },
-          geo: {
-            properties: {
-              srcdest: {
-                type: 'keyword',
-              },
-              dest: {
-                type: 'keyword',
-              },
-              src: {
-                type: 'keyword',
-              },
-              coordinates: {
-                type: 'geo_point'
-              }
+      // properties
+      properties: omitFields({
+        '@timestamp': {
+          type: 'date'
+        },
+        id: {
+          type: 'integer',
+          index: 'true',
+        },
+        clientip: {
+          type: 'ip'
+        },
+        ip: {
+          type: 'ip'
+        },
+        memory: {
+          type: 'double'
+        },
+        referer: {
+          type: 'keyword',
+        },
+        geo: {
+          properties: {
+            srcdest: {
+              type: 'keyword',
+            },
+            dest: {
+              type: 'keyword',
+            },
+            src: {
+              type: 'keyword',
+            },
+            coordinates: {
+              type: 'geo_point'
             }
-          },
-          meta: {
-            properties: {
-              related: {
-                type: 'text',
-              },
-              char: {
-                type: 'keyword',
-              },
-              user: {
-                properties: {
-                  firstname: {
-                    type: 'text',
-                  },
-                  lastname: {
-                    type: 'integer',
-                    index: 'true'
-                  }
+          }
+        },
+        meta: {
+          properties: {
+            related: {
+              type: 'text',
+            },
+            char: {
+              type: 'keyword',
+            },
+            user: {
+              properties: {
+                firstname: {
+                  type: 'text',
+                },
+                lastname: {
+                  type: 'integer',
+                  index: 'true'
                 }
               }
             }
           }
-        }, true)
-      }
+        }
+      }, true)
     }
   };
 
