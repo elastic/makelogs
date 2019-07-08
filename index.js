@@ -39,9 +39,14 @@ client.usable
         continue;
       }
 
+      var header = { _index: event.index };
+      if (argv.types) {
+        header._type = '_doc';
+      }
+
       // eventBuffer.push might return a promise,
       var delay = eventBuffer.push({
-        header: { _index: event.index, _type: '_doc' },
+        header,
         body: event
       });
 

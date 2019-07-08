@@ -88,6 +88,12 @@ module.exports = function createIndex() {
     }
   };
 
+  if (argv.types) {
+    body.mappings = {
+      _doc: body.mappings
+    }
+  }
+
   return client.usable
   .then(function () {
     return Promise.props({

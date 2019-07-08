@@ -77,6 +77,11 @@ var optimist = require('optimist')
       alias: 'i',
       describe: 'The interval that indices should roll over, either "daily", "monthly", "yearly", or a number of documents.',
       default: 100000
+    },
+    types: {
+      describe: 'Pass to enable types in index and document creation',
+      type: 'boolean',
+      default: false,
     }
   });
 
