@@ -2,7 +2,6 @@ var async = require('async');
 
 var argv = require('../argv');
 var client = require('../_client');
-var _ = require('lodash');
 var first = true;
 
 module.exports = function (eventBuffer) {
@@ -35,7 +34,7 @@ module.exports = function (eventBuffer) {
         if (resp.errors) {
           resp.items.forEach(function (item, i) {
             var error = (item.index || item.create).error;
-            if (_.isPlainObject(error) && error.reason) {
+            if (error && typeof error === 'object' && error.reason) {
               error = error.reason;
             }
             if (error) {

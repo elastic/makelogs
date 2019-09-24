@@ -1,4 +1,3 @@
-var _ = require('lodash');
 var join = require('path').join;
 var read = require('fs').readFileSync;
 
@@ -118,7 +117,7 @@ argv.total = require('./_parseCount')(argv);
 
 
 // since logging is based on the verbose command line flag??
-argv.log = argv.verbose ? _.bind(console.log, console) : _.noop;
+argv.log = argv.verbose ? (...args) => console.log(...args) : () => {};
 
 require('./_progress')(argv);
 

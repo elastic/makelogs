@@ -5,14 +5,13 @@
 
 module.exports = WeightedList;
 
-var _ = require('lodash');
 var inherits = require('util').inherits;
 
 function WeightedList(list) {
   Array.call(this);
-
-  _.forEach(list, _.bindKey(this, 'push'));
-
+  for (const [value, weight] of Object.entries(list)) {
+    this.push(weight, value)
+  }
 }
 inherits(WeightedList, Array);
 

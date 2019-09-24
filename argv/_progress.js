@@ -1,5 +1,4 @@
 var ProgressBar = require('progress');
-var _ = require('lodash');
 
 module.exports = function (argv) {
   var start;
@@ -15,7 +14,7 @@ module.exports = function (argv) {
   };
 
   if (argv.verbose) {
-    argv.progress = _.bind(console.log, console, 'bulk request indexed %s documents \n');
+    argv.progress = (...x) => console.log('bulk request indexed %s documents \n', ...x);
   } else {
     argv.progress = function update(indexedCount) {
       if (!progressBar) {

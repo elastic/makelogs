@@ -1,12 +1,10 @@
-var _ = require('lodash');
-
 module.exports = function setupCount(argv) {
-  if (_.isNumber(argv.count)) {
+  if (typeof argv.count === 'number') {
     return argv.count;
   }
 
   var exprRE = /^(?:\d+(?:\.\d+)?)(b|m|t|h|k)+$/;
-  if (_.isString(argv.count) && argv.count.match(exprRE)) {
+  if (typeof argv.count === 'string' && argv.count.match(exprRE)) {
     // parses just the numbers off the front, ignores trailing characters
     var num = parseFloat(argv.count);
     var power = 0;

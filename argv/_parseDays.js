@@ -1,4 +1,3 @@
-var _ = require('lodash');
 var moment = require('moment');
 
 var customDayBoundsRE = /^\-?\d+\/\-?\d+$/;
@@ -8,14 +7,14 @@ module.exports = function parseDays(argv) {
   var startBase = moment().utc().startOf('day');
   var endBase = moment().utc().endOf('day');
 
-  if (_.isNumber(argv.days)) {
+  if (typeof argv.days === 'number') {
     return [
       startBase.subtract(argv.days, 'days'),
       endBase.add(argv.days, 'days')
     ];
   }
 
-  if (_.isString(argv.days)) {
+  if (typeof argv.days === 'string') {
     if (customDayBoundsRE.test(argv.days)) {
       var ends = argv.days.split('/').map(parseFloat);
       return [

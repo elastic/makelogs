@@ -1,12 +1,11 @@
-var _ = require('lodash');
 var argv = require('./argv');
 
 if (!argv.omit) {
-  module.exports = _.identity;
+  module.exports = (x) => x;
   return;
 }
 
-var paths = (_.isArray(argv.omit) ? argv.omit : [argv.omit]).map(parseStringPropertyPath);
+var paths = (Array.isArray(argv.omit) ? argv.omit : [argv.omit]).map(parseStringPropertyPath);
 
 module.exports = function (body, isFieldMap) {
   isFieldMap = !!isFieldMap;
@@ -40,7 +39,7 @@ module.exports = function (body, isFieldMap) {
   }
 
   function walkIn(arr, path) {
-    if (!_.isArray(arr)) return;
+    if (!Array.isArray(arr)) return;
 
     arr.forEach(function (obj) {
       unDefine(obj, path);

@@ -1,4 +1,3 @@
-var _ = require('lodash');
 var WeightedList = require('./weighted_list');
 var RandomList = require('./random_list');
 var RandomSample = require('./random_sample');
@@ -85,8 +84,9 @@ sets.stylesheets = new RandomList([
 
 sets.relatedContent = new RandomSample(0, 5, require('./_content'));
 
-module.exports = _.mapValues(sets, function (set) {
-  return (typeof set === 'function') ? set : function () {
-    return set.get();
-  };
-});
+module.exports = {};
+for (const [key, set] of Object.entries(sets)) {
+  module.exports[key] = typeof set === 'function'
+    ? set
+    : () => set.get();
+}

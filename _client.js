@@ -1,6 +1,5 @@
 var formatUrl = require('url').format;
 var argv = require('./argv');
-var _ = require('lodash');
 var through2 = require('through2');
 var parse = require('url').parse;
 var elasticsearch = require('elasticsearch');
@@ -11,7 +10,7 @@ var RequestTimeout = elasticsearch.errors.RequestTimeout;
 var url = argv.url;
 if (!url) {
   var host = String(argv.host);
-  var proto = _.contains(host, '//') ? '' : '//';
+  var proto = host.includes('//') ? '' : '//';
   var parsed = parse(proto + host, false, true);
 
   url = formatUrl({
@@ -61,5 +60,5 @@ client.ping({
 
   client.close();
   // prevent the promise from ever resolving or rejecting
-  return new Promise(_.noop);
+  return new Promise(() => {});
 });

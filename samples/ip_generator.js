@@ -1,6 +1,8 @@
 module.exports = IpGenerator;
 
-var _ = require('lodash');
+const random = (min, max) => (
+  min + Math.floor(Math.random() * (max - min + 1))
+)
 
 function IpGenerator(maxCount, maxSessions) {
   this.maxSessions = maxSessions;
@@ -16,7 +18,7 @@ IpGenerator.prototype.get = function () {
     index = this.sessions.length;
     this.sessions.push(session);
   } else {
-    index = _.random(0, this.sessions.length - 1);
+    index = random(0, this.sessions.length - 1);
     session = this.sessions[index];
   }
 
@@ -29,8 +31,8 @@ IpGenerator.prototype.get = function () {
 };
 
 IpGenerator.prototype.makeRandom = function () {
-  return _.random(0, 255) + '.' +
-    _.random(0, 255) + '.' +
-    _.random(0, 255) + '.' +
-    _.random(0, 255);
+  return random(0, 255) + '.' +
+    random(0, 255) + '.' +
+    random(0, 255) + '.' +
+    random(0, 255);
 };
