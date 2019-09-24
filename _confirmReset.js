@@ -1,5 +1,4 @@
 var inquirer = require('inquirer');
-var Promise = require('bluebird');
 
 var argv = require('./argv');
 

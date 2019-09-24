@@ -1,5 +1,4 @@
 var async = require('async');
-var Promise = require('bluebird');
 
 var argv = require('../argv');
 var client = require('../_client');
@@ -21,54 +20,54 @@ module.exports = function (eventBuffer) {
     });
 
     Promise.resolve(client.usable)
-    .then(function () {
-      if (body.length) {
-        argv.log('sending', body.length / 2, 'bulk requests');
-        return client.bulk({
-          body: body
-        });
-      } else {
-        return {};
-      }
-    })
-    .then(function (resp) {
-      var eventCount = resp.items.length;
-      if (resp.errors) {
-        resp.items.forEach(function (item, i) {
-          var error = (item.index || item.create).error;
-          if (_.isPlainObject(error) && error.reason) {
-            error = error.reason;
-          }
-          if (error) {
-            eventCount -= 1;
-
-            if (error.match(/^EsRejectedExecutionException/)) {
-              esBulkQueueOverflow ++;
-              eventBuffer.push(events[i]);
-            } else {
-              console.error(error);
-              process.exit();
+      .then(function () {
+        if (body.length) {
+          argv.log('sending', body.length / 2, 'bulk requests');
+          return client.bulk({
+            body: body
+          });
+        } else {
+          return {};
+        }
+      })
+      .then(function (resp) {
+        var eventCount = resp.items.length;
+        if (resp.errors) {
+          resp.items.forEach(function (item, i) {
+            var error = (item.index || item.create).error;
+            if (_.isPlainObject(error) && error.reason) {
+              error = error.reason;
             }
-          }
-        });
-      }
+            if (error) {
+              eventCount -= 1;
 
-      argv.progress(eventCount);
-    })
-    .catch(function (err) {
-      console.error(err.stack);
-      throw err;
-    })
-    .finally(function () {
-      if (esBulkQueueOverflow) {
-        // pause for 10ms per queue overage
-        queue.pause();
-        setTimeout(function () {
-          queue.resume();
-        }, 10 * esBulkQueueOverflow);
-      }
-    })
-    .nodeify(done);
+              if (error.match(/^EsRejectedExecutionException/)) {
+                esBulkQueueOverflow ++;
+                eventBuffer.push(events[i]);
+              } else {
+                console.error(error);
+                process.exit();
+              }
+            }
+          });
+        }
+
+        argv.progress(eventCount);
+      })
+      .catch(function (err) {
+        console.error(err.stack);
+        throw err;
+      })
+      .finally(function () {
+        if (esBulkQueueOverflow) {
+          // pause for 10ms per queue overage
+          queue.pause();
+          setTimeout(function () {
+            queue.resume();
+          }, 10 * esBulkQueueOverflow);
+        }
+      })
+      .then((v) => done(null, v), e => done(e));
   }, 1);
 
   queue.drain = function () {

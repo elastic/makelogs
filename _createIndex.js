@@ -1,4 +1,3 @@
-var Promise = require('bluebird');
 var argv = require('./argv');
 var client = require('./_client');
 var omitFields = require('./_omitFields');
@@ -95,17 +94,15 @@ module.exports = function createIndex() {
   }
 
   return client.usable
-  .then(function () {
-    return Promise.props({
-      template: client.indices.existsTemplate({
-        name: indexTemplateName
-      }),
-      indices: client.indices.exists({
-        index: indexTemplate,
-        allowNoIndices: false
-      })
-    });
-  })
+  .then(async () => ({
+    template: await client.indices.existsTemplate({
+      name: indexTemplateName
+    }),
+    indices: await client.indices.exists({
+      index: indexTemplate,
+      allowNoIndices: false
+    })
+  }))
   .then(function (exists) {
     function clearExisting() {
       console.log('clearing existing "%s" index templates and indices', indexTemplate);

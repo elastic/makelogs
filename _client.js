@@ -1,7 +1,6 @@
 var formatUrl = require('url').format;
 var argv = require('./argv');
 var _ = require('lodash');
-var Promise = require('bluebird');
 var through2 = require('through2');
 var parse = require('url').parse;
 var elasticsearch = require('elasticsearch');

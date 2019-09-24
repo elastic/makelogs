@@ -1,8 +1,9 @@
 var eventBuffer = [];
 var argv = require('../argv');
-var Promise = require('bluebird');
 var omitFields = require('../_omitFields');
 var bulkQueue = require('./_bulkQueue')(eventBuffer);
+
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 eventBuffer.push = function (event) {
   // pushing false is the sign that we are done pushing
@@ -24,7 +25,7 @@ var pending;
 eventBuffer.flush = function () {
   if (pending) return pending;
 
-  pending = Promise.delay(1)
+  pending = sleep(1)
   .then(function () {
     pending = null;
 
