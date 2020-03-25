@@ -1,10 +1,6 @@
 var inquirer = require('inquirer');
 
-var argv = require('./argv');
-
-module.exports = async function () {
-  if (argv.reset != null) return resolve();
-
+module.exports = async function (argv) {
   const resp = await inquirer.prompt([
     {
       type: 'confirm',
