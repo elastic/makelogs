@@ -1,3 +1,5 @@
+'use strict';
+
 var join = require('path').join;
 var read = require('fs').readFileSync;
 

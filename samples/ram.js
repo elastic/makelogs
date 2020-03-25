@@ -1,3 +1,5 @@
+'use strict';
+
 var gb = 1024 * 1024 * 1024;
 
 module.exports = [

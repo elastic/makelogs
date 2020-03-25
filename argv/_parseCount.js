@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function setupCount(argv) {
   if (typeof argv.count === 'number') {
     return argv.count;
