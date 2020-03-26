@@ -1,3 +1,5 @@
+'use strict';
+
 var ProgressBar = require('progress');
 
 module.exports = function (argv) {

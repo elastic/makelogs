@@ -1,3 +1,5 @@
+'use strict';
+
 var argv = require('./argv');
 
 if (!argv.omit) {

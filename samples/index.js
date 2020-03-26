@@ -1,3 +1,5 @@
+'use strict';
+
 var WeightedList = require('./weighted_list');
 var RandomList = require('./random_list');
 var RandomSample = require('./random_sample');

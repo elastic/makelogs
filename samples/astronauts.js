@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = [
   'Joseph M. Acaba',
   'Loren Acton',

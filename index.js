@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Notify user of updates
  */
