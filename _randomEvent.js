@@ -1,3 +1,5 @@
+'use strict';
+
 var samples = require('./samples');
 var argv = require('./argv');
 var stringGenerator = require('./samples/string_generator');

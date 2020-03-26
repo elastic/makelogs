@@ -1,3 +1,5 @@
+'use strict';
+
 var eventBuffer = [];
 var argv = require('../argv');
 var omitFields = require('../_omitFields');

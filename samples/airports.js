@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = [
   { lat:31.95376472, lon: -89.23450472 },
   { lat:30.68586111, lon: -95.01792778 },

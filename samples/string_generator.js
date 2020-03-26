@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function stringGenerator (length, withSpaces) {
   var chars = 'abcdefghijklmnopqrstuvwxyz';
   if (withSpaces) {

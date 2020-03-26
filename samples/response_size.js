@@ -1,3 +1,5 @@
+'use strict';
+
 var Stochator = require('./stochator');
 var roundAllGets = require('./round_all_gets');
 
