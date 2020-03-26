@@ -136,7 +136,7 @@ module.exports = function createIndex() {
         }
         return; // do nothing, index template exists
       default:
-        return confirmReset().then(maybeReset);
+        return confirmReset(argv).then(maybeReset);
       }
     }
 

@@ -93,6 +93,12 @@ if (argv.help) {
   process.exit();
 }
 
+// Possible states of `argv.reset`:
+//   default: null
+//   --reset: [null, true]
+//   --no-reset: [null, false]
+if (Array.isArray(argv.reset)) argv.reset = argv.reset.pop();
+
 switch (argv.indexInterval) {
   case 'daily':
   case 'weekly':
