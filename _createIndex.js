@@ -4,13 +4,18 @@ var argv = require('./argv');
 var client = require('./_client');
 var omitFields = require('./_omitFields');
 var confirmReset = require('./_confirmReset');
+var argv = require('./argv');
 
 module.exports = function createIndex() {
   var indexTemplate = argv.indexPrefix + '*';
   var indexTemplateName = 'makelogs_index_template__' + argv.indexPrefix;
 
   var body = {
-    template: indexTemplate,
+    ...(
+      argv.indexTemplatesV1
+        ? { template: indexTemplate }
+        : { index_patterns: indexTemplate }
+    ),
     settings: {
       index: {
         number_of_shards: argv.shards,
