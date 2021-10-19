@@ -39,7 +39,8 @@ var client = module.exports = new Client({
       });
     })
   },
-  host: url
+  host: url,
+  ssl:{ rejectUnauthorized: false, pfx: [] }
 });
 
 client.usable = usable;

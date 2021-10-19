@@ -7,7 +7,7 @@ var confirmReset = require('./_confirmReset');
 var argv = require('./argv');
 
 module.exports = function createIndex() {
-  var indexTemplate = argv.indexPrefix + '*';
+  var indexTemplate = argv.indexPrefix + '0';
   var indexTemplateName = 'makelogs_index_template__' + argv.indexPrefix;
 
   var body = {
