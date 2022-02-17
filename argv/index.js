@@ -24,6 +24,7 @@ program
   .option('-i, --indexInterval <...>', 'The interval that indices should roll over, either "daily", "monthly", "yearly", or a number of documents.', parseIndexInterval, 100000)
   .option('--types', 'Pass to enable types in index and document creation')
   .option('--indexTemplatesV1', 'Pass to enable types in index templates v1 compatibility')
+  .option('--insecure', 'Pass to set ssl:{ rejectUnauthorized: false, pfx: [] }')
   .version(require('../package.json').version)
   .helpOption('--help', 'This help message')
   .on('--help', function () {

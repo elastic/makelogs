@@ -110,18 +110,23 @@ module.exports = function createIndex() {
       allowNoIndices: false
     })
   }))
-  .then(function (exists) {
-    function clearExisting() {
+  .then(async function (exists) {
+    async function clearExisting() {
       console.log('clearing existing "%s" index templates and indices', indexTemplate);
+      const existingIndicesRsp = await client.indices.getAlias({index: indexTemplate, ignore: 404});
+      const existingIndices = Object.keys(existingIndicesRsp || {});
       return Promise.all([
         client.indices.deleteTemplate({
           ignore: 404,
           name: indexTemplateName
         }),
-        client.indices.delete({
-          ignore: 404,
-          index: indexTemplate
-        })
+        ...existingIndices.map(indexName => {
+          console.log(`deleting ${indexName}`);
+          return client.indices.delete({
+            ignore: 404,
+            index: indexName
+          })
+        }) 
       ]);
     }
 
