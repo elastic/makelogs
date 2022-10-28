@@ -35,8 +35,7 @@
     "inquirer": "^7.0.0",
     "moment": "^2.10.6",
     "progress": "^1.1.8",
-    "through2": "^2.0.0",
-    "update-notifier": "^0.5.0"
+    "through2": "^2.0.0"
   },
   "devDependencies": {
     "jshint": "^2.9.2"

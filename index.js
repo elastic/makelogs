@@ -3,12 +3,9 @@
 /**
  * Notify user of updates
  */
-var pkg = require('./package.json');
-require('update-notifier')({ packageName: pkg.name, packageVersion: pkg.version }).notify();
 
 var client = require('./_client');
 var randomEvent = require('./_randomEvent');
-var samples = require('./samples');
 var eventBuffer = require('./eventBuffer');
 var createIndex = require('./_createIndex');
 var argv = require('./argv');
