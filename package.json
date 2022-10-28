@@ -1,6 +1,6 @@
 {
   "name": "@elastic/makelogs",
-  "version": "6.1.0",
+  "version": "6.1.1",
   "description": "Simple log generator for testing kibana",
   "main": "index.js",
   "scripts": {
