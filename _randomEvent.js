@@ -14,15 +14,16 @@ var countOfDays = (function () {
 
   if (cursor.valueOf() <= end) {
     do {
-      cursor.add(1, 'day');
+      cursor.add(1, argv.timeWindowType);
       count += 1;
     } while (cursor.valueOf() <= end);
   }
 
   return count;
 }());
-var countPerDay = Math.ceil(count / countOfDays);
 
+var countPerDay = Math.ceil(count / countOfDays);
+// console.log('Count', count, 'countOfDays', countOfDays, 'countPerDay', countPerDay);
 var indexInterval = argv.indexInterval;
 var dayMoment = argv.start.clone();
 var day;
@@ -32,38 +33,82 @@ module.exports = function RandomEvent(indexPrefix) {
 
   var i = ++eventCounter;
   var iInDay = i % countPerDay;
+  var ms = samples.lessRandomMsInDay();
 
   if (day && iInDay === 0) {
-    dayMoment.add(1, 'day');
+    dayMoment.add(1, argv.timeWindowType);
     day = null;
   }
 
-  if (day == null) {
-    day = {
-      year: dayMoment.year(),
-      month: dayMoment.month(),
-      date: dayMoment.date(),
-    };
+  if (argv.timeWindowType === "day") {
+    if (day == null) {
+      day = {
+        year: dayMoment.year(),
+        month: dayMoment.month(),
+        date: dayMoment.date(),
+      };
+    }
+    // extract number of hours from the milliseconds
+    var hours = Math.floor(ms / 3600000);
+    ms = ms - hours * 3600000;
+    // extract number of minutes from the milliseconds
+    var minutes = Math.floor(ms / 60000);
+    ms = ms - minutes * 60000;
+
+    // extract number of seconds from the milliseconds
+    var seconds = Math.floor(ms / 1000);
+    ms = ms - seconds * 1000;
+    // apply the values found to the date
+    var date = new Date(day.year, day.month, day.date, hours, minutes, seconds, ms);
+  }
+  else if (argv.timeWindowType === "hour") {
+    if (day == null) {
+      day = {
+        year: dayMoment.year(),
+        month: dayMoment.month(),
+        date: dayMoment.date(),
+        hour: dayMoment.hour(),
+      };
+    }
+    // extract number of hours from the milliseconds
+    var hours = Math.floor(ms / 3600000);
+    ms = ms - hours * 3600000;
+    // extract number of minutes from the milliseconds
+    var minutes = Math.floor(ms / 60000);
+    ms = ms - minutes * 60000;
+    // extract number of seconds from the milliseconds
+    var seconds = Math.floor(ms / 1000);
+    ms = ms - seconds * 1000;
+    // apply the values found to the date
+    var date = new Date(day.year, day.month, day.date, day.hour, minutes, seconds, ms);
+  }
+  else {
+    if (day == null) {
+      day = {
+        year: dayMoment.year(),
+        month: dayMoment.month(),
+        date: dayMoment.date(),
+        hour: dayMoment.hour(),
+        minute: dayMoment.minute(),
+      };
+    }
+    // extract number of hours from the milliseconds
+    var hours = Math.floor(ms / 3600000);
+    ms = ms - hours * 3600000;
+    // extract number of minutes from the milliseconds
+    var minutes = Math.floor(ms / 60000);
+    ms = ms - minutes * 60000;
+    // extract number of seconds from the milliseconds
+    var seconds = Math.floor(ms / 1000);
+    ms = ms - seconds * 1000;
+    // apply the values found to the date
+    var date = new Date(day.year, day.month, day.date, day.hour, day.minute, seconds, ms);   
   }
 
-  var ms = samples.lessRandomMsInDay();
-
-  // extract number of hours from the milliseconds
-  var hours = Math.floor(ms / 3600000);
-  ms = ms - hours * 3600000;
-
-  // extract number of minutes from the milliseconds
-  var minutes = Math.floor(ms / 60000);
-  ms = ms - minutes * 60000;
-
-  // extract number of seconds from the milliseconds
-  var seconds = Math.floor(ms / 1000);
-  ms = ms - seconds * 1000;
-
-  // apply the values found to the date
-  var date = new Date(day.year, day.month, day.date, hours, minutes, seconds, ms);
+  // console.log('i', i, 'iInDay', iInDay, 'day', day, 'date', date);
+ 
   var dateAsIso = date.toISOString();
-
+  // console.log('dateAsIso', dateAsIso, 'date', date);
   switch (indexInterval) {
     case 'yearly':
       event.index = indexPrefix + dateAsIso.substr(0, 4);
