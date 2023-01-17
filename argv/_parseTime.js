@@ -82,16 +82,22 @@ module.exports = function parseDays(argv) {
 
   var startBase = moment().utc().startOf(timeType);
   var endBase = moment().utc().endOf(endTimeType);
-  console.log('startBase', startBase, 'endBase', endBase, timeType, endTimeType, startBaseValueTmp, endBaseValueTmp);
-  console.log(startBase.subtract(arg_time, timeType), endBase.add(arg_time, endTimeType));
+  console.log(timeType, endTimeType, startBaseValueTmp, endBaseValueTmp,startBase.subtract(startBaseValueTmp, timeType), endBase.add(endBaseValueTmp, endTimeType));
+  return [
+    startBase.subtract(startBaseValueTmp, timeType),
+    endBase.add(endBaseValueTmp, endTimeType)
+  ];
   if (typeof arg_time === 'number') {
+    console.log("number");
     return [
-      startBase.subtract(arg_time, timeType),
-      endBase.add(arg_time, endTimeType)
+      startBase.subtract(startBaseValueTmp, timeType),
+      endBase.add(endBaseValueTmp, endTimeType)
     ];
   }
   else if (typeof arg_time === 'string') {
+    console.log("string");
     if (customDayBoundsRE.test(arg_time)) {
+      console.log("string 1 if");
       var ends = arg_time.split('/').map(parseFloat);
       return [
         startBase.subtract(ends[0], timeType),
