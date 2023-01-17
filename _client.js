@@ -10,6 +10,7 @@ var NoConnections = elasticsearch.errors.NoConnections;
 var RequestTimeout = elasticsearch.errors.RequestTimeout;
 
 var url = argv.url;
+console.log(url);
 if (!url) {
   var host = String(argv.host);
   var proto = host.includes('//') ? '' : '//';
@@ -39,10 +40,10 @@ var client = module.exports = new Client({
       });
     })
   },
-  host: url,
+  host: url,  
   ssl: argv.insecure ? { rejectUnauthorized: false, pfx: [] } : {}
 });
-
+console.log(host);
 client.usable = usable;
 
 client.ping({
