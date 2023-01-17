@@ -10,7 +10,10 @@ module.exports = function parseDays(argv) {
   // check last char of argv.time[0] to get hour minute days and set in new var1
   // check last char of argv.time[1] to get hour minute days and set in new var2
   // continue replacing argv.timeWindowType with new var1 and new var2
-  var splitTime = argv.time.split("/");
+  var arg_time = argv.time.href
+  console.log(arg_time)
+  exit()
+  var splitTime = arg_time.split("/");
   var startBaseTmp = splitTime[0];
   var startBaseTypeTmp = startBaseTmp.at(-1);
   
@@ -81,21 +84,21 @@ module.exports = function parseDays(argv) {
   var startBase = moment().utc().startOf(timeType);
   var endBase = moment().utc().endOf(endTimeType);
   // console.log('startBase', startBase, 'endBase', endBase);
-  if (typeof argv.time === 'number') {
+  if (typeof arg_time === 'number') {
     return [
-      startBase.subtract(argv.time, timeType),
-      endBase.add(argv.time, endTimeType)
+      startBase.subtract(arg_time, timeType),
+      endBase.add(arg_time, endTimeType)
     ];
   }
-  else if (typeof argv.time === 'string') {
-    if (customDayBoundsRE.test(argv.time)) {
-      var ends = argv.time.split('/').map(parseFloat);
+  else if (typeof arg_time === 'string') {
+    if (customDayBoundsRE.test(arg_time)) {
+      var ends = arg_time.split('/').map(parseFloat);
       return [
         startBase.subtract(ends[0], timeType),
         endBase.add(ends[1], endTimeType)
       ];
     }
-    else if (oldDayExpressionRE.test(argv.time)) {
+    else if (oldDayExpressionRE.test(arg_time)) {
       throw new TypeError('the format of the --days flag has changed. run `makelogs --help` for more info.')
     }
   }
