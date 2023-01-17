@@ -12,7 +12,7 @@ program
   .option('-d, --days <number>', 'Number of days ± today to generate data for. Use one number or two separated by a slash, e.g. "1/10" to go back one day, and forward 10', parseNumber, 1)
   // .option('--timeWindowType <...>', 'The time window in which documents will be created, either "day", "hour", "minute"', parseTimeWindow, 'day')
   // .option('--timeWindowValue <number>', 'Number of days/hours/minutes ± now to generate data for. Use one number or two separated by a slash, e.g. "1/10" to go back one hour, and forward 10', parseNumber, 1)
-  .option('-t, --time <...>', 'Number of days/hours/minutes ± today/now to generate data for. Use one number&first_letter or two separated by a slash, e.g. "1d/10h" to go back one day, and forward 10 hours', parseTimeWindow, '1d/1d')
+  .option('-t, --time <number>', 'Number of days/hours/minutes ± today/now to generate data for. Use one number&first_letter or two separated by a slash, e.g. "1d/10h" to go back one day, and forward 10 hours', parseTimeWindow, '1d/1d')
   .option('--url <url>', 'Elasticsearch url, overrides host and auth, can include any url part.')
   .option('-h, --host <host>', 'The host name and port', 'localhost:9200')
   .option('--auth <auth>', 'user:password when you want to connect to a secured elasticsearch cluster over basic auth', null)
@@ -64,6 +64,7 @@ function parseNumberStrict (str) {
   if (isNaN(num)) {
     throw new TypeError(`${str} is not a number`);
   }
+  console.log("test", num);
   return num
 }
 
@@ -86,6 +87,10 @@ function parseTimeWindow (str) {
     case 'minute':
       return str;
     default:
-      return parseNumberStrict(str);
+      return parseString(str);
   }
+}
+
+function parseString (str) {
+  return str
 }

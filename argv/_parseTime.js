@@ -10,9 +10,9 @@ module.exports = function parseDays(argv) {
   // check last char of argv.time[0] to get hour minute days and set in new var1
   // check last char of argv.time[1] to get hour minute days and set in new var2
   // continue replacing argv.timeWindowType with new var1 and new var2
-  var arg_time = argv.time.href
+  var arg_time = argv.time
   console.log(arg_time)
-  exit()
+  // return null;
   var splitTime = arg_time.split("/");
   var startBaseTmp = splitTime[0];
   var startBaseTypeTmp = startBaseTmp.at(-1);
@@ -80,10 +80,10 @@ module.exports = function parseDays(argv) {
     }
   }
 
-
   var startBase = moment().utc().startOf(timeType);
   var endBase = moment().utc().endOf(endTimeType);
-  // console.log('startBase', startBase, 'endBase', endBase);
+  console.log('startBase', startBase, 'endBase', endBase, timeType, endTimeType, startBaseValueTmp, endBaseValueTmp);
+  console.log(startBase.subtract(arg_time, timeType), endBase.add(arg_time, endTimeType));
   if (typeof arg_time === 'number') {
     return [
       startBase.subtract(arg_time, timeType),
