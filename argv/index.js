@@ -9,8 +9,13 @@ program
   .description('A utility to generate sample log data.')
   .option('-c, --count <number>', 'Total event that will be created, accepts expressions like "1m" for 1 million (b,m,t,h)', parseNumber, 14000)
   // .requiredOption('-d, --days <number>', 'Number of days ± today to generate data for. Use one number or two separated by a slash, e.g. "1/10" to go back one day, and forward 10', parseNumber, 1)
+<<<<<<< HEAD
   .option('--timeWindowType <...>', 'The time window in which documents will be created, either "day", "hour", "minute"', parseTimeWindow, 'day')
   .option('--timeWindowValue <number>', 'Number of days/hours/minutes ± now to generate data for. Use one number or two separated by a slash, e.g. "1/10" to go back one hour, and forward 10', parseNumber, 1)
+=======
+  .option('-d, --days <number>', 'Number of days ± today to generate data for. Use one number or two separated by a slash, e.g. "1/10" to go back one day, and forward 10', parseString, null)
+  .option('-t, --time <...>', 'Number of days/hours/minutes ± today/now to generate data for. Use one number&first_letter or two separated by a slash, e.g. "1d/10h" to go back one day, and forward 10 hours', parseString, null)
+>>>>>>> v1.1
   .option('--url <url>', 'Elasticsearch url, overrides host and auth, can include any url part.')
   .option('-h, --host <host>', 'The host name and port', 'localhost:9200')
   .option('--auth <auth>', 'user:password when you want to connect to a secured elasticsearch cluster over basic auth', null)
@@ -40,6 +45,7 @@ program.parse(process.argv);
 var moments = require('./_parseTime')(program);
 program.start = moments[0];
 program.end = moments[1];
+program.timeType = moments[2];
 
 // parsing allows short notation like "10m" or "1b"
 program.total = require('./_parseCount')(program);
@@ -62,6 +68,7 @@ function parseNumberStrict (str) {
   if (isNaN(num)) {
     throw new TypeError(`${str} is not a number`);
   }
+  console.log("test", num);
   return num
 }
 
@@ -77,6 +84,7 @@ function parseIndexInterval (str) {
   }
 }
 
+<<<<<<< HEAD
 function parseTimeWindow (str) {
   switch (str) {
     case 'day':
@@ -87,3 +95,8 @@ function parseTimeWindow (str) {
       return parseNumberStrict(str);
   }
 }
+=======
+function parseString (str) {
+  return str
+}
+>>>>>>> v1.1

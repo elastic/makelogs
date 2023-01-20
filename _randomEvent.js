@@ -6,6 +6,7 @@ var stringGenerator = require('./samples/string_generator');
 
 var eventCounter = -1;
 var count = argv.total;
+var moment = require('moment');
 
 var countOfDays = (function () {
   var cursor = argv.start.clone();
@@ -14,7 +15,11 @@ var countOfDays = (function () {
 
   if (cursor.valueOf() <= end) {
     do {
+<<<<<<< HEAD
       cursor.add(1, argv.timeWindowType);
+=======
+      cursor.add(1, argv.timeType.valueOf());
+>>>>>>> v1.1
       count += 1;
     } while (cursor.valueOf() <= end);
   }
@@ -23,7 +28,10 @@ var countOfDays = (function () {
 }());
 
 var countPerDay = Math.ceil(count / countOfDays);
+<<<<<<< HEAD
 // console.log('Count', count, 'countOfDays', countOfDays, 'countPerDay', countPerDay);
+=======
+>>>>>>> v1.1
 var indexInterval = argv.indexInterval;
 var dayMoment = argv.start.clone();
 var day;
@@ -36,11 +44,19 @@ module.exports = function RandomEvent(indexPrefix) {
   var ms = samples.lessRandomMsInDay();
 
   if (day && iInDay === 0) {
+<<<<<<< HEAD
     dayMoment.add(1, argv.timeWindowType);
     day = null;
   }
 
   if (argv.timeWindowType === "day") {
+=======
+    dayMoment.add(1, argv.timeType.valueOf());
+    day = null;
+  }
+
+  if (argv.timeType.valueOf() === "day") {
+>>>>>>> v1.1
     if (day == null) {
       day = {
         year: dayMoment.year(),
@@ -60,6 +76,7 @@ module.exports = function RandomEvent(indexPrefix) {
     ms = ms - seconds * 1000;
     // apply the values found to the date
     var date = new Date(day.year, day.month, day.date, hours, minutes, seconds, ms);
+<<<<<<< HEAD
   }
   else if (argv.timeWindowType === "hour") {
     if (day == null) {
@@ -106,6 +123,52 @@ module.exports = function RandomEvent(indexPrefix) {
   }
 
   // console.log('i', i, 'iInDay', iInDay, 'day', day, 'date', date);
+=======
+  }
+  else if (argv.timeType.valueOf() === "hour") {
+    if (day == null) {
+      day = {
+        year: dayMoment.year(),
+        month: dayMoment.month(),
+        date: dayMoment.date(),
+        hour: dayMoment.hour(),
+      };
+    }
+    // extract number of hours from the milliseconds
+    var hours = Math.floor(ms / 3600000);
+    ms = ms - hours * 3600000;
+    // extract number of minutes from the milliseconds
+    var minutes = Math.floor(ms / 60000);
+    ms = ms - minutes * 60000;
+    // extract number of seconds from the milliseconds
+    var seconds = Math.floor(ms / 1000);
+    ms = ms - seconds * 1000;
+    // apply the values found to the date
+    var date = new Date(day.year, day.month, day.date, day.hour, minutes, seconds, ms);
+  }
+  else {
+    if (day == null) {
+      day = {
+        year: dayMoment.year(),
+        month: dayMoment.month(),
+        date: dayMoment.date(),
+        hour: dayMoment.hour(),
+        minute: dayMoment.minute(),
+      };
+    }
+    // extract number of hours from the milliseconds
+    var hours = Math.floor(ms / 3600000);
+    ms = ms - hours * 3600000;
+    // extract number of minutes from the milliseconds
+    var minutes = Math.floor(ms / 60000);
+    ms = ms - minutes * 60000;
+    // extract number of seconds from the milliseconds
+    var seconds = Math.floor(ms / 1000);
+    ms = ms - seconds * 1000;
+    // apply the values found to the date
+    var date = new Date(day.year, day.month, day.date, day.hour, day.minute, seconds, ms);   
+  }
+>>>>>>> v1.1
  
   var dateAsIso = date.toISOString();
   // console.log('dateAsIso', dateAsIso, 'date', date);
@@ -125,7 +188,6 @@ module.exports = function RandomEvent(indexPrefix) {
       event.index = indexPrefix + Math.floor(i / indexInterval);
       break;
   }
-
   event['@timestamp'] = dateAsIso;
   event.ip = samples.ips();
   event.extension = samples.extensions();
