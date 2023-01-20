@@ -27,7 +27,7 @@ var usable = new Promise(function (resolve) {
   makeUseable = resolve;
 });
 
-var ms = 5000;
+var ms = 10000;
 var client = module.exports = new Client({
   log: {
     type: 'stream',
@@ -42,7 +42,6 @@ var client = module.exports = new Client({
   host: url,  
   ssl: argv.insecure ? { rejectUnauthorized: false, pfx: [] } : {}
 });
-console.log(host);
 client.usable = usable;
 
 client.ping({

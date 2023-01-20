@@ -10,9 +10,17 @@ module.exports = function parseDays(argv) {
   // check last char of argv.time[0] to get hour minute days and set in new var1
   // check last char of argv.time[1] to get hour minute days and set in new var2
   // continue replacing argv.timeWindowType with new var1 and new var2
-  var arg_time = argv.time
-  console.log(arg_time)
-  // return null;
+  if (argv.days === null && argv.time === null) {
+    var arg_time = '1d/1d';
+  }
+  else {
+    if ( argv.days !== null ) {
+      var arg_time = argv.days;
+    }
+    else {
+      var arg_time = argv.time;
+    }
+  }
   var splitTime = arg_time.split("/");
   var startBaseTmp = splitTime[0];
   var startBaseTypeTmp = startBaseTmp.at(-1);
@@ -28,14 +36,6 @@ module.exports = function parseDays(argv) {
       break;
     case 'm':
       var timeType = "minute";
-      var startBaseValueTmp = startBaseTmp.slice(0, -1);
-      break;
-    case 'w':
-      var timeType = "week";
-      var startBaseValueTmp = startBaseTmp.slice(0, -1);
-      break;
-    case 'y':
-      var timeType = "year";
       var startBaseValueTmp = startBaseTmp.slice(0, -1);
       break;
     default:
@@ -65,14 +65,6 @@ module.exports = function parseDays(argv) {
         var endTimeType = "minute";
         var endBaseValueTmp = endBaseTmp.slice(0, -1);
         break;
-      case 'w':
-        var endTimeType = "week";
-        var endBaseValueTmp = endBaseTmp.slice(0, -1);
-        break;
-      case 'y':
-        var endTimeType = "year";
-        var endBaseValueTmp = endBaseTmp.slice(0, -1);
-        break;
       default:
         var endTimeType = "day";
         var endBaseValueTmp = endBaseTmp;
@@ -82,34 +74,10 @@ module.exports = function parseDays(argv) {
 
   var startBase = moment().utc().startOf(timeType);
   var endBase = moment().utc().endOf(endTimeType);
-  console.log(timeType, endTimeType, startBaseValueTmp, endBaseValueTmp,startBase.subtract(startBaseValueTmp, timeType), endBase.add(endBaseValueTmp, endTimeType));
+  // console.log(timeType, endTimeType, startBaseValueTmp, endBaseValueTmp,startBase.subtract(startBaseValueTmp, timeType), endBase.add(endBaseValueTmp, endTimeType));
   return [
     startBase.subtract(startBaseValueTmp, timeType),
-    endBase.add(endBaseValueTmp, endTimeType)
+    endBase.add(endBaseValueTmp, endTimeType),
+    timeType
   ];
-  if (typeof arg_time === 'number') {
-    console.log("number");
-    return [
-      startBase.subtract(startBaseValueTmp, timeType),
-      endBase.add(endBaseValueTmp, endTimeType)
-    ];
-  }
-  else if (typeof arg_time === 'string') {
-    console.log("string");
-    if (customDayBoundsRE.test(arg_time)) {
-      console.log("string 1 if");
-      var ends = arg_time.split('/').map(parseFloat);
-      return [
-        startBase.subtract(ends[0], timeType),
-        endBase.add(ends[1], endTimeType)
-      ];
-    }
-    else if (oldDayExpressionRE.test(arg_time)) {
-      throw new TypeError('the format of the --days flag has changed. run `makelogs --help` for more info.')
-    }
-  }
-
-  else {
-    throw new TypeError('Unable to determine the starting and end dates.');
-  }
 };

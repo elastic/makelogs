@@ -6,6 +6,7 @@ var stringGenerator = require('./samples/string_generator');
 
 var eventCounter = -1;
 var count = argv.total;
+var moment = require('moment');
 
 var countOfDays = (function () {
   var cursor = argv.start.clone();
@@ -14,7 +15,7 @@ var countOfDays = (function () {
 
   if (cursor.valueOf() <= end) {
     do {
-      cursor.add(1, argv.timeWindowType);
+      cursor.add(1, argv.timeType.valueOf());
       count += 1;
     } while (cursor.valueOf() <= end);
   }
@@ -23,7 +24,6 @@ var countOfDays = (function () {
 }());
 
 var countPerDay = Math.ceil(count / countOfDays);
-// console.log('Count', count, 'countOfDays', countOfDays, 'countPerDay', countPerDay);
 var indexInterval = argv.indexInterval;
 var dayMoment = argv.start.clone();
 var day;
@@ -36,11 +36,11 @@ module.exports = function RandomEvent(indexPrefix) {
   var ms = samples.lessRandomMsInDay();
 
   if (day && iInDay === 0) {
-    dayMoment.add(1, argv.timeWindowType);
+    dayMoment.add(1, argv.timeType.valueOf());
     day = null;
   }
 
-  if (argv.timeWindowType === "day") {
+  if (argv.timeType.valueOf() === "day") {
     if (day == null) {
       day = {
         year: dayMoment.year(),
@@ -61,7 +61,7 @@ module.exports = function RandomEvent(indexPrefix) {
     // apply the values found to the date
     var date = new Date(day.year, day.month, day.date, hours, minutes, seconds, ms);
   }
-  else if (argv.timeWindowType === "hour") {
+  else if (argv.timeType.valueOf() === "hour") {
     if (day == null) {
       day = {
         year: dayMoment.year(),
@@ -104,11 +104,9 @@ module.exports = function RandomEvent(indexPrefix) {
     // apply the values found to the date
     var date = new Date(day.year, day.month, day.date, day.hour, day.minute, seconds, ms);   
   }
-
-  // console.log('i', i, 'iInDay', iInDay, 'day', day, 'date', date);
  
   var dateAsIso = date.toISOString();
-  // console.log('dateAsIso', dateAsIso, 'date', date);
+
   switch (indexInterval) {
     case 'yearly':
       event.index = indexPrefix + dateAsIso.substr(0, 4);
@@ -125,7 +123,6 @@ module.exports = function RandomEvent(indexPrefix) {
       event.index = indexPrefix + Math.floor(i / indexInterval);
       break;
   }
-
   event['@timestamp'] = dateAsIso;
   event.ip = samples.ips();
   event.extension = samples.extensions();
