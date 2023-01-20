@@ -39,10 +39,9 @@ var client = module.exports = new Client({
       });
     })
   },
-  host: url,
+  host: url,  
   ssl: argv.insecure ? { rejectUnauthorized: false, pfx: [] } : {}
 });
-
 client.usable = usable;
 
 client.ping({
