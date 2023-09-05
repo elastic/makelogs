@@ -25,6 +25,7 @@ program
   .option('--types', 'Pass to enable types in index and document creation')
   .option('--indexTemplatesV1', 'Pass to enable types in index templates v1 compatibility')
   .option('--insecure', 'Pass to set ssl:{ rejectUnauthorized: false, pfx: [] }')
+    .option('--apiKey <api-key>', 'set elastic cloud api key auth')
   .version(require('../package.json').version)
   .helpOption('--help', 'This help message')
   .on('--help', function () {

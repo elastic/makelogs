@@ -20,10 +20,6 @@ client.usable
   console.log('Generating', total, 'events from', startingMoment.format(), 'to', endingMoment.format());
 })
 .then(function () {
-  if (argv.dry) return;
-  return createIndex();
-})
-.then(function () {
   argv.log('creating', total, 'events');
   var i = total;
   return (function crunch() {

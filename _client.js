@@ -4,10 +4,10 @@ var formatUrl = require('url').format;
 var argv = require('./argv');
 var through2 = require('through2');
 var parse = require('url').parse;
-var elasticsearch = require('elasticsearch');
+var elasticsearch = require('@elastic/elasticsearch');
 var Client = elasticsearch.Client;
-var NoConnections = elasticsearch.errors.NoConnections;
-var RequestTimeout = elasticsearch.errors.RequestTimeout;
+var NoConnections = elasticsearch.errors.ConnectionError;
+var RequestTimeout = elasticsearch.errors.TimeoutError;
 
 var url = argv.url;
 if (!url) {
@@ -39,19 +39,19 @@ var client = module.exports = new Client({
       });
     })
   },
-  host: url,
+  nodes: [url],
+  auth: argv.apiKey ? { apiKey: argv.apiKey } : undefined,
   ssl: argv.insecure ? { rejectUnauthorized: false, pfx: [] } : {}
 });
 
 client.usable = usable;
 
-client.ping({
-  requestTimeout: ms
-})
+client.ping({}, { requestTimeout: ms })
 .then(function () {
   makeUseable();
 })
 .catch(function (err) {
+  console.log(err);
   var notAlive = err instanceof NoConnections;
   var timeout = err instanceof RequestTimeout;
 

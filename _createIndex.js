@@ -102,9 +102,6 @@ module.exports = function createIndex() {
 
   return client.usable
   .then(async () => ({
-    template: await client.indices.existsTemplate({
-      name: indexTemplateName
-    }),
     indices: await client.indices.exists({
       index: indexTemplate,
       allowNoIndices: false
@@ -157,5 +154,7 @@ module.exports = function createIndex() {
     } else {
       return create();
     }
-  });
+  }).catch(function (err) {console.error(err)});
+
+
 };

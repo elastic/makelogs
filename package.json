@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/elastic/makelogs",
   "dependencies": {
+    "@elastic/elasticsearch": "^8.9.0",
     "async": "^1.4.2",
     "commander": "^5.0.0",
     "elasticsearch": "^16.4.0",
