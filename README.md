@@ -68,10 +68,10 @@ npm install -g @elastic/makelogs
 then run `makelogs --help` for usage info:
 
 ```
-$ ./bin/makelogs --help
+$ makelogs --help
 A utility to generate sample log data.
 
-Usage: node ./bin/makelogs@beta [options]
+Usage: node makelogs@beta [options]
 
 Options:
   ...
