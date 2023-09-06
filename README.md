@@ -71,7 +71,7 @@ then run `makelogs --help` for usage info:
 $ makelogs --help
 A utility to generate sample log data.
 
-Usage: node makelogs@beta [options]
+Usage: makelogs [options]
 
 Options:
   ...
