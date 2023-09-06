@@ -6,6 +6,7 @@ var stringGenerator = require('./samples/string_generator');
 
 var eventCounter = -1;
 var count = argv.total;
+var moment = require('moment');
 
 var countOfDays = (function () {
   var cursor = argv.start.clone();
@@ -14,15 +15,15 @@ var countOfDays = (function () {
 
   if (cursor.valueOf() <= end) {
     do {
-      cursor.add(1, 'day');
+      cursor.add(1, argv.timeType.valueOf());
       count += 1;
     } while (cursor.valueOf() <= end);
   }
 
   return count;
 }());
-var countPerDay = Math.ceil(count / countOfDays);
 
+var countPerDay = Math.ceil(count / countOfDays);
 var indexInterval = argv.indexInterval;
 var dayMoment = argv.start.clone();
 var day;
@@ -32,36 +33,78 @@ module.exports = function RandomEvent(indexPrefix) {
 
   var i = ++eventCounter;
   var iInDay = i % countPerDay;
+  var ms = samples.lessRandomMsInDay();
 
   if (day && iInDay === 0) {
-    dayMoment.add(1, 'day');
+    dayMoment.add(1, argv.timeType.valueOf());
     day = null;
   }
 
-  if (day == null) {
-    day = {
-      year: dayMoment.year(),
-      month: dayMoment.month(),
-      date: dayMoment.date(),
-    };
+  if (argv.timeType.valueOf() === "day") {
+    if (day == null) {
+      day = {
+        year: dayMoment.year(),
+        month: dayMoment.month(),
+        date: dayMoment.date(),
+      };
+    }
+    // extract number of hours from the milliseconds
+    var hours = Math.floor(ms / 3600000);
+    ms = ms - hours * 3600000;
+    // extract number of minutes from the milliseconds
+    var minutes = Math.floor(ms / 60000);
+    ms = ms - minutes * 60000;
+
+    // extract number of seconds from the milliseconds
+    var seconds = Math.floor(ms / 1000);
+    ms = ms - seconds * 1000;
+    // apply the values found to the date
+    var date = new Date(day.year, day.month, day.date, hours, minutes, seconds, ms);
   }
-
-  var ms = samples.lessRandomMsInDay();
-
-  // extract number of hours from the milliseconds
-  var hours = Math.floor(ms / 3600000);
-  ms = ms - hours * 3600000;
-
-  // extract number of minutes from the milliseconds
-  var minutes = Math.floor(ms / 60000);
-  ms = ms - minutes * 60000;
-
-  // extract number of seconds from the milliseconds
-  var seconds = Math.floor(ms / 1000);
-  ms = ms - seconds * 1000;
-
-  // apply the values found to the date
-  var date = new Date(day.year, day.month, day.date, hours, minutes, seconds, ms);
+  else if (argv.timeType.valueOf() === "hour") {
+    if (day == null) {
+      day = {
+        year: dayMoment.year(),
+        month: dayMoment.month(),
+        date: dayMoment.date(),
+        hour: dayMoment.hour(),
+      };
+    }
+    // extract number of hours from the milliseconds
+    var hours = Math.floor(ms / 3600000);
+    ms = ms - hours * 3600000;
+    // extract number of minutes from the milliseconds
+    var minutes = Math.floor(ms / 60000);
+    ms = ms - minutes * 60000;
+    // extract number of seconds from the milliseconds
+    var seconds = Math.floor(ms / 1000);
+    ms = ms - seconds * 1000;
+    // apply the values found to the date
+    var date = new Date(day.year, day.month, day.date, day.hour, minutes, seconds, ms);
+  }
+  else {
+    if (day == null) {
+      day = {
+        year: dayMoment.year(),
+        month: dayMoment.month(),
+        date: dayMoment.date(),
+        hour: dayMoment.hour(),
+        minute: dayMoment.minute(),
+      };
+    }
+    // extract number of hours from the milliseconds
+    var hours = Math.floor(ms / 3600000);
+    ms = ms - hours * 3600000;
+    // extract number of minutes from the milliseconds
+    var minutes = Math.floor(ms / 60000);
+    ms = ms - minutes * 60000;
+    // extract number of seconds from the milliseconds
+    var seconds = Math.floor(ms / 1000);
+    ms = ms - seconds * 1000;
+    // apply the values found to the date
+    var date = new Date(day.year, day.month, day.date, day.hour, day.minute, seconds, ms);   
+  }
+ 
   var dateAsIso = date.toISOString();
 
   switch (indexInterval) {
@@ -80,7 +123,6 @@ module.exports = function RandomEvent(indexPrefix) {
       event.index = indexPrefix + Math.floor(i / indexInterval);
       break;
   }
-
   event['@timestamp'] = dateAsIso;
   event.ip = samples.ips();
   event.extension = samples.extensions();
