@@ -40,7 +40,7 @@ var client = module.exports = new Client({
     })
   },
   host: url,
-  ssl: argv.insecure ? { rejectUnauthorized: false, pfx: [] } : {}
+  ssl:{ rejectUnauthorized: false, pfx: [] },  
 });
 
 client.usable = usable;
