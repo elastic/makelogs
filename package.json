@@ -32,7 +32,7 @@
     "async": "^1.4.2",
     "commander": "^5.0.0",
     "elasticsearch": "^16.4.0",
-    "inquirer": "^7.0.0",
+    "inquirer": "^8.2.7",
     "moment": "^2.10.6",
     "progress": "^1.1.8",
     "through2": "^2.0.0"
