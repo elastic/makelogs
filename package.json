@@ -8,7 +8,7 @@
     "jshint": "jshint _* index.js samples bin"
   },
   "bin": {
-    "makelogs": "./bin/makelogs"
+    "makelogs": "bin/makelogs"
   },
   "repository": {
     "type": "git",
