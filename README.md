@@ -77,6 +77,12 @@ Options:
   ...
 ```
 
+If the argument `--url` is used to specify a custom elasticsearch url, make sure to include the user credentials in the url itself.
+
+```
+$ makelogs --url https://user:password@host:port
+```
+
 
 The tool is, admittedly, not super configurable. Just tell it how many events you want, how many days to generate data for, and it will cruise.
 
